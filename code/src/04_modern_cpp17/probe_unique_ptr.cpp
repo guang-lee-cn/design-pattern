@@ -3,8 +3,11 @@
 //
 // 把下面三问写成一段既能被编译器检查、也能被运行验证的代码：
 //   问一   unique_ptr<ConsoleLogger> 是怎么变成 unique_ptr<Logger> 的？
-//   问二   要不要写 std::move？
+//   问二   要不要写 std::move？—— 其中"返回函数参数"一项的答案依赖标准版本
 //   问三   std::forward 参不参与？
+//
+// 注：问二的第 ③ 种情形在 C++17 与 C++20 下行为不同，本文件用条件编译
+//     把两个版本都钉住。它是全篇唯一一处"答案随标准版本改变"的地方。
 //
 // 这三问是中文技术博客里最容易写错的地方。多数文章会顺手写成
 // "这里发生了移动语义 / 完美转发" —— 两句话都不准确。
@@ -44,7 +47,7 @@ static_assert(!std::is_constructible<std::unique_ptr<ConsoleLogger>,
               "向下转型不行：它必须在编译期被挡住");
 
 // ---------------------------------------------------------------------------
-// 问二：要不要写 std::move？—— 不要
+// 问二：要不要写 std::move？—— 看返回的是什么，也看标准版本
 //
 // 这一版刻意先具名、再返回，也就是"return 一个局部对象"。
 // ---------------------------------------------------------------------------
@@ -53,8 +56,8 @@ std::unique_ptr<Logger> make_from_named_local() {
     return local;  // 没写 std::move：C++11 起先按右值做重载决议
 }
 
-// 唯一必须写 std::move 的情形：返回**成员变量**。
-// 隐式移动只覆盖"局部对象"和"函数参数"，不覆盖成员。
+// 返回**成员变量**在任何标准版本下都必须写 std::move。
+// 隐式移动只覆盖"局部自动对象"，以及（C++20 起）函数参数；不覆盖成员。
 class Holder {
 public:
     void reset() { owned_ = std::make_unique<ConsoleLogger>(); }
@@ -74,11 +77,24 @@ private:
 //
 // 返回语句这一侧根本没有"完美转发"这回事：
 //   纯右值      C++17 起直接构造返回对象，连移动构造都没发生（保证的复制省略）
-//   局部对象    隐式移动
-//   函数参数    同样是隐式移动（下面这个函数就是这一情形）
+//   局部对象    隐式移动（C++11 起）
+//   函数参数    分版本：C++17 不算隐式移动，C++20 起才算
+//
+// ↓ 下面这个函数同时是问二的第 ③ 种情形和问三的证据，也是全篇唯一
+//   "答案随标准版本改变"的地方——所以用条件编译把两个版本都钉住，
+//   写错任何一半都编不过。
 // ---------------------------------------------------------------------------
 std::unique_ptr<Logger> make_from_forwarded_param(std::unique_ptr<Logger>&& incoming) {
-    return incoming;  // 既不需要 std::move，也不需要 std::forward
+#if __cplusplus >= 202002L
+    // C++20（P1825R0）起，"指向非 volatile 对象类型的右值引用"被纳入
+    // implicitly movable entity，所以这里可以不写。
+    return incoming;
+#else
+    // C++17 及以前，[class.copy.elision] 的措辞是
+    // "other than a function or catch-clause parameter"——函数参数被显式排除。
+    // 不写 std::move 就会去匹配 unique_ptr 已删除的拷贝构造，直接编译失败。
+    return std::move(incoming);
+#endif
 }
 
 // 对照：真正需要 std::forward 的地方 —— 把实参原样转手给另一个函数。
@@ -119,9 +135,11 @@ int main() {
         Holder holder;
         holder.reset();
         auto moved = holder.release_member();
-        std::cout << "  return local;               局部对象    不写，编译器隐式处理\n";
-        std::cout << "  return incoming;            函数参数    不写，同样隐式处理\n";
-        std::cout << "  return std::move(owned_);   成员变量    必须写\n";
+        std::cout << "  return local;               局部对象    不写，C++11 起隐式移动\n";
+        std::cout << "  return incoming;            函数参数    C++17 必须写；C++20 起可省\n";
+        std::cout << "  return std::move(owned_);   成员变量    必须写，所有版本一致\n";
+        std::cout << "  本文件实际按 __cplusplus=" << __cplusplus << " 编译（"
+                  << (__cplusplus >= 202002L ? "C++20 或更新" : "C++17 及以前") << "）\n";
         std::cout << "  搬走之后 holder 是否已空 → " << (holder.empty() ? "是" : "否")
                   << "（搬出来的对象 " << (moved ? "有效" : "为空") << "）\n\n";
     }
@@ -132,6 +150,11 @@ int main() {
         Sink sink;
         forward_to_sink(std::make_unique<ConsoleLogger>(), sink);
         std::cout << "  出现在返回语句里       不参与，写了只是噪音\n";
+        std::cout << "  函数参数返回           "
+                  << (__cplusplus >= 202002L
+                          ? "本次编译走 C++20：不写 std::move 也能过"
+                          : "本次编译走 C++17：不写 std::move 就编不过")
+                  << "\n";
         std::cout << "  转手传给另一个函数时   必须用，sink.taken="
                   << (sink.taken() ? "true" : "false") << "\n";
         std::cout << "  （若把左值传给 forward_to_sink，会因移动构造被删除而编译失败 ——\n"
@@ -139,7 +162,8 @@ int main() {
         std::cout << "  经参数返回的对象是否有效 → " << (via_param ? "是" : "否") << "\n\n";
     }
 
-    std::cout << "结论：工厂返回 unique_ptr 时，源码里一行 std::move / std::forward 都不该出现。\n";
-    std::cout << "      它们出现在那里，通常说明作者把「隐式移动」记成了「必须手写移动」。\n";
+    std::cout << "结论：工厂把 unique_ptr 送出去时，std::forward 一次都不该出现；\n";
+    std::cout << "      std::move 只在两处该出现——返回成员变量，以及（仅限 C++17）返回函数参数。\n";
+    std::cout << "      在别处看到它们，通常说明作者把「隐式移动」记成了「必须手写移动」。\n";
     return 0;
 }
