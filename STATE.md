@@ -1,37 +1,62 @@
 ---
 project: design-pattern
-updated: 2026-09-20T14:13:50+08:00
+updated: 2026-09-20T21:37:43+08:00
 phase: 内容
-step_id: S-010
-status: active
-head: 7768372
+step_id: S-011
+status: done
+head: d17191e docs: 第 1 节由「是什么」改为「诞生背景」，代价节名与代码目录对齐
 verify: cd factory-pattern/code && sh clean.sh && sh run.sh
 ---
 
 ## 已完成（含验证证据）
 
-- [S-009] 场景 1 `01_select`（运行时按条件选型 / 简单工厂）：工程收敛为两层 CMake（`src/` 用 `GLOB_RECURSE` 自动发现，target = `<节>_<场景>_old|new`）+ 工程根唯一 `run.sh [Release|Debug] [节] [场景]` + `clean.sh`；Google C++ Style；共享键名在 `include/constants.h`。
-- [S-010] 场景 2 `02_framework_slot`（框架插槽 / GoF 工厂方法原生形态）：old 为框架基类 switch 直接构造具体按钮；new 为抽象 `Button` + 纯虚 `CreateButton()` 插槽，`Render()` 模板方法固定流程、子类填槽。验证（GCC 13.3.0）：零 warning；Release/Debug 下两场景 old/new 输出均逐字节一致；Debug ELF 含 debug_info；非法参数 exit=1。
+- [S-011] **修正骨架第 1 节的问法**（只碰仓库级文件，`code/` 一字未动）：
+  原第 1 节「是什么」作废——问题是**问法本身不成立**：名词定义没有终止条件，"答到哪算完"说不清，
+  实测旧素材里它被标成"已展开"而正文只有 3 行。改为第 1 节「诞生背景」，
+  原第 2 节「背景与代价」改名「不用它，代价是什么」（与 `code/src/02_cost/` 的目录名对齐）；
+  "定义要能被反例检验"这条硬要求移到第 8 节——反例是"区分"的工具，不是定义的工具。
+  依据：**GoF 原书自己的模板里没有"定义"这一节**，它给"是什么"的配额是 `Intent` 的一两句话，
+  紧接着就是 `Motivation`（一个具体场景）。改动落在 `TEMPLATE.md`（§1 / §2 / §5 / §7 共 9 处）
+  与 `factory-pattern/README.md`（进度表 + 运行入口）。
+- [S-011 附] 场景 3 `03_complex_creation`（创建昂贵 / 有约束——连接按逻辑名去重复用）**代码已录入并通过验证**：
+  Release 下 old 打开连接 4 次、new 复用后 2 次；业务行为逐字节一致，差异只在资源统计行（即收益本身）。
+  该场景由使用者手敲；助手只把它与本次文档改动**分开提交**。
+- [S-010] 场景 2 `02_framework_slot`（框架插槽 / GoF 工厂方法原生形态）：old 为框架基类 switch 直接构造具体按钮；
+  new 为抽象 `Button` + 纯虚 `CreateButton()` 插槽，`Render()` 模板方法固定流程、子类填槽。
+- [S-009] 场景 1 `01_select`（运行时按条件选型 / 简单工厂）：工程收敛为两层 CMake（`src/` 用 `GLOB_RECURSE` 自动发现，
+  target = `<节>_<场景>_old|new`）+ 工程根唯一 `run.sh [Release|Debug] [节] [场景]` + `clean.sh`；Google C++ Style；共享键名在 `include/constants.h`。
 
 ## 下一步（唯一）
 
-- 动作：罗列场景 3 `03_complex_creation`（创建昂贵/有约束——连接按逻辑名去重复用）的 `old.cpp`/`new.cpp`；使用者录入后 `sh run.sh 02_cost` 自动纳入。
-- 注意：从本场景起痛点是"创建代价"，old/new 业务行为仍逐字节一致，但资源统计行预期不同（差异即收益），验证时对非资源行做 diff。
+- 动作：罗列场景 4 的 `old.cpp` / `new.cpp`；使用者录入后 `sh run.sh 02_cost` 自动纳入。
+  同时把**六个场景的选题清单落进本文件**——它目前只记在对话里，任何中断都会丢失（场景 1/2/3 是运行时选型、框架插槽、创建昂贵）。
+- 验证口径：从场景 3 起，old / new 业务行为仍逐字节一致、差异只在资源统计行；对**非资源行**做 diff。
 - 六个场景代码齐备并聊透、使用者说"写下来"后，助手再落第 2 节 `docs/`。
 
 ## 阻塞
 
-- `check_pattern.py` 报 `[!!] docs/ 下没有任何 .md`：聊天/代码阶段的**预期中间态**。此阶段 `verify` 只含工程一键构建运行；docs 落盘后把 `python3 tools/check_pattern.py factory-pattern` 加回 `verify`。
+- `check_pattern.py` 报 `[!!] docs/ 下没有任何 .md`：聊天 / 代码阶段的**预期中间态**。此阶段 `verify` 只含工程一键构建运行；docs 落盘后把 `python3 tools/check_pattern.py factory-pattern` 加回 `verify`。
 
 ## 决策
 
 - 本文件只记与**仓库结构**直接相关的结论；步骤历史只保留最近一步
 - **知识进仓库，过程出仓库**；章节顺序服从依赖，聊天顺序不限
-- **`code/` 由使用者手敲、亲手构建验证**；助手不碰 `code/`，停机前仅用同一套命令独立复核
-- 工程内同构重复一律用自动发现/参数消除，不写逐目录登记的转发壳
+- **`code/` 由使用者手敲、亲手构建验证**；助手不碰 `code/`，停机前仅用同一套命令独立复核。
+  **`code/` 的未提交改动不得被卷进文档提交**——S-011 犯过一次（`git add -A` 把场景 3 一起提交了），
+  已用 `reset --soft` 拆开：代码一个提交、文档一个提交。此后 `git add` 一律**显式给路径**，不用 `-A`。
+- **节的标题就是它的问法，问法必须有终止条件。** 名词定义（"是什么 / 有哪些"）没有终点，
+  一律改写成"它从哪来 / 不这么做要付什么代价"。**章首那一两句话不占节号。**
+  → 据此，本轮选择了**不重排节号**的方案（`code/src/02_cost/` 与 `run.sh 02_cost` 零改动），
+  而不是"删掉第 1 节、后续各前移一位"。
+- 第 1 节「诞生背景」的来历段**暂不提为仓库级共享文档**：GoF 那 23 个模式共享同一段来历，
+  但本仓库目前只写第 1 个模式。等第 2 个模式出现**真实重复**时再提——
+  这与 `TEMPLATE.md` 自身的诞生方式一致（先走完一个模式，再提取共性）。
+- 工程内同构重复一律用自动发现 / 参数消除，不写逐目录登记的转发壳
 - 脚本 POSIX sh；C++17 + Google C++ Style；`#ifndef` 保护（不用 `#pragma once`）；共享键名进 `include/constants.h`
 - **篇数不预设**：一节可一篇也可拆多篇
 
 ## 待拍板（≤1）
 
-- none
+- 仓库外的 `design-pattern-workflow/ITERATION_PLAN.md` **已严重过时**：它按旧的十节序号与旧步号（S-008…S-011）
+  排，而 `STATE.md` 也在用同一个 `S-0xx` 命名空间——**两套编号已经撞车**（同名不同义）。
+  处置二选一：**废弃它**（步进只留 `STATE.md` 一个来源），或**按 `STATE.md` 重写它**。倾向废弃。
