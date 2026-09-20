@@ -60,14 +60,18 @@ python3 tools/check_state.py . --resume   # 打印状态卡（先看有没有 [!
 
 ## 4. 配套工程：同一套命令，人机都能一键运行
 
-`code/` 工程只维护**一套**构建（统一的 `build/` 目录），运行入口分两级：
+`code/` 工程只维护**一套**构建，运行入口分两级：
 
 - 工程根 `run.sh`：构建并运行**全部**节、全部场景；
 - `src/<节>/run.sh`：构建并运行**本节**全部场景（如 `src/02_cost/run.sh`）。
 
-两级入口都跑同一条 cmake 配置与构建命令，不另建 build 目录。场景目录（`src/<节>/<场景>/`）**不放脚本**，只放 `old.cpp`/`new.cpp`；需要单独调试某个场景时，直接运行 `build/src/<节>/` 下对应的可执行文件。
+两级入口都跑同一条 cmake 配置与构建命令，不另建脚本；场景目录（`src/<节>/<场景>/`）**不放脚本**，只放 `old.cpp`/`new.cpp`；需要单独调试某个场景时，直接运行对应 build 目录下的可执行文件。
 
-所有 `run.sh` 用 **POSIX sh** 编写（`#!/bin/sh`；不得使用 `pipefail`、`BASH_SOURCE`、`[[ ]]` 等 bash 专有语法，路径取自 `$0`），因此 `./run.sh`、`sh run.sh`、`bash run.sh` 三种调用方式等价，在任意子目录里直接 `sh run.sh` 即可，无需可执行权限。
+**构建类型**：入口脚本接受参数 `sh run.sh [Release|Debug]`（同时认 `BUILD_TYPE` 环境变量，默认 Release）。Release 产物在 `build/`，Debug 产物在 `build-debug/`，分目录存放，避免反复切换触发全量重编。单配置生成器（Make/Ninja）由此切换；多配置生成器（MSVC）暂不专门处理。Debug 专属编译/链接选项（如 sanitizer）等出现真实需要时再以 `option()` 引入，不预先堆砌。
+
+**清理**：工程根 `clean.sh`（POSIX sh）删除全部构建产物目录；清理动作只在工程根做，节级不放清理脚本。
+
+所有 `run.sh`、`clean.sh` 用 **POSIX sh** 编写（`#!/bin/sh`；不得使用 `pipefail`、`BASH_SOURCE`、`[[ ]]` 等 bash 专有语法，路径取自 `$0`），因此 `./run.sh`、`sh run.sh`、`bash run.sh` 三种调用方式等价，在任意子目录里直接 `sh <脚本>` 即可，无需可执行权限。
 
 这套入口同时是：
 
