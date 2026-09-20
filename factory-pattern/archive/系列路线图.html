@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《C++ 工厂模式》Blog 系列路线图 · WorkBuddy 版</title>
+<style>
+  :root{
+    --bg:#f4f6f8; --card:#ffffff; --line:#e1e7ed; --ink:#1f2b36;
+    --ink2:#5a6b7b; --ink3:#8496a5; --accent:#0e6b52; --accent-bg:#e8f3ee;
+    --accent-line:#b6d8c9; --warn:#b4652a; --warn-bg:#fdf2e7;
+    --p0:#b4652a; --p1:#3d7ea6; --p2:#8895a3;
+    --exist:#0e6b52; --new:#c9a227;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:"Microsoft YaHei","PingFang SC","Hiragino Sans GB",sans-serif;
+       background:var(--bg);color:var(--ink);padding:28px 24px 40px;line-height:1.6;}
+  .wrap{max-width:1060px;margin:0 auto;}
+  h1{font-size:23px;letter-spacing:.2px;}
+  .sub{font-size:13px;color:var(--ink2);margin-top:6px;}
+  .tagline{font-size:12px;color:var(--ink3);margin-top:4px;}
+
+  h2{font-size:15px;margin:26px 0 10px;padding-left:9px;border-left:3px solid var(--accent);}
+  .sec-note{font-size:12.5px;color:var(--ink2);margin-bottom:10px;}
+
+  /* 主线 */
+  .mainline{display:flex;flex-wrap:wrap;gap:6px;align-items:center;
+            background:var(--card);border:1px solid var(--line);border-radius:10px;
+            padding:12px 14px;margin-top:16px;}
+  .stage{font-size:12.5px;font-weight:600;background:var(--accent-bg);color:var(--accent);
+         border:1px solid var(--accent-line);border-radius:999px;padding:4px 12px;}
+  .arrow{color:var(--ink3);font-size:13px;}
+
+  /* 诊断数字 */
+  .diag{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:14px;}
+  .dnum{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;}
+  .dnum .k{font-size:12px;color:var(--ink2);}
+  .dnum .v{font-size:26px;font-weight:700;color:var(--accent);line-height:1.25;margin:2px 0 4px;}
+  .dnum .v small{font-size:13px;font-weight:600;color:var(--ink2);}
+  .dnum .n{font-size:12px;color:var(--ink3);line-height:1.5;}
+
+  /* 卡片 */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px;}
+  .card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--p1);
+        border-radius:9px;padding:13px 15px;}
+  .card.p0{border-left-color:var(--p0);}
+  .card.p1{border-left-color:var(--p1);}
+  .card.p2{border-left-color:var(--p2);}
+  .card.idx{border-left-color:var(--accent);border-left-style:dashed;}
+  .card .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:8px;}
+  .no{font-size:12px;font-weight:700;color:var(--accent);}
+  .badge{font-size:11px;border-radius:4px;padding:2px 7px;color:#fff;white-space:nowrap;}
+  .b-p0{background:var(--p0);} .b-p1{background:var(--p1);} .b-p2{background:var(--p2);}
+  .b-idx{background:var(--accent);}
+  .card h3{font-size:14px;line-height:1.45;margin-bottom:8px;font-weight:600;}
+  .meta{font-size:12px;color:var(--ink2);line-height:1.65;}
+  .meta .src{color:var(--accent);font-weight:600;}
+  .meta .key{color:var(--ink);font-weight:600;}
+  .meta .task{color:var(--warn);}
+  /* 存量/新写条 */
+  .bar{margin-top:9px;}
+  .bar .lbl{display:flex;justify-content:space-between;font-size:10.5px;color:var(--ink3);margin-bottom:3px;}
+  .bar .track{display:flex;height:7px;border-radius:4px;overflow:hidden;background:#eef2f5;}
+  .bar .exist{background:var(--exist);}
+  .bar .new{background:var(--new);}
+  .bar .keep{background:#e6eaee;}
+
+  /* 时间轴 */
+  .tl{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:14px;}
+  .tlrow{display:flex;flex-wrap:wrap;align-items:stretch;}
+  .tlcell{flex:1;min-width:158px;border-right:1px dashed var(--line);padding:4px 14px 4px 0;}
+  .tlcell:last-child{border-right:none;}
+  .tlcell .w{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:4px;}
+  .tlcell .t{font-size:11.5px;color:var(--ink2);line-height:1.55;}
+  .tlcell .t b{color:var(--warn);font-weight:600;}
+
+  /* 表 */
+  table{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--card);
+        border:1px solid var(--line);border-radius:9px;overflow:hidden;}
+  th{background:#eef2f5;color:var(--ink);font-weight:600;text-align:left;padding:8px 10px;
+     border-bottom:1px solid var(--line);font-size:12px;}
+  td{padding:8px 10px;border-bottom:1px solid #f0f3f6;color:var(--ink2);vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
+  td b{color:var(--ink);}
+  td .inplace{color:var(--accent);font-weight:600;}
+  td .teaser{color:var(--warn);font-weight:600;}
+
+  .notes{margin-top:14px;background:var(--card);border:1px solid var(--line);
+         border-radius:10px;padding:14px 16px;font-size:12.5px;color:var(--ink2);}
+  .notes b{color:var(--ink);}
+  .notes ul{margin:8px 0 0 18px;}
+  .notes li{margin-bottom:5px;}
+  .legend{display:flex;flex-wrap:wrap;gap:16px;font-size:11.5px;color:var(--ink2);margin-top:10px;}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px;}
+  .foot{margin-top:18px;font-size:11.5px;color:var(--ink3);text-align:right;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>《C++ 工厂模式：从 if/else 到架构边界》系列路线图</h1>
+  <div class="sub">7 篇正文 + 1 篇纯索引 ｜ 篇号 = 阅读顺序 ｜ 主线：为什么需要 → 怎么选 → 现在怎么写 → 边界在哪 → 真实世界</div>
+  <div class="tagline">基于 <code>工厂模式.md</code>（10 章 / 3,309 中文字 / 34 代码块）× <code>工厂模式修改建议.log</code> 的量化诊断与重组 · WorkBuddy 版</div>
+
+  <div class="mainline">
+    <span class="stage">为什么要工厂</span><span class="arrow">→</span>
+    <span class="stage">三种工厂怎么选</span><span class="arrow">→</span>
+    <span class="stage">产品族与装配</span><span class="arrow">→</span>
+    <span class="stage">C++17 现代写法</span><span class="arrow">→</span>
+    <span class="stage">边界：DI / 何时不用</span><span class="arrow">→</span>
+    <span class="stage">真实世界：开源案例</span>
+  </div>
+
+  <h2>先看诊断：三个决定排期的数字</h2>
+  <div class="diag">
+    <div class="dnum">
+      <div class="k">源文档正文中文字</div>
+      <div class="v">3,309</div>
+      <div class="n">27 KB 的体积里只有 3,309 个中文字——密度大的是代码，不是论述。</div>
+    </div>
+    <div class="dnum">
+      <div class="k">代码块 / 可编译单元</div>
+      <div class="v">34 <small>→ 0</small></div>
+      <div class="n">34 块、343 行、平均 10 行；仅 1 块含 <code>int main</code>、3 块含 <code>#include</code>。不是"代码少"，是"代码碎"。</div>
+    </div>
+    <div class="dnum">
+      <div class="k">存量覆盖率</div>
+      <div class="v">≈ 11%</div>
+      <div class="n">目标 2 万–2.9 万字，可复用正文 2,738 字。此计划是<b>写作计划</b>，不是拆分计划。</div>
+    </div>
+  </div>
+
+  <h2>篇目结构</h2>
+  <div class="sec-note">卡片底部灰条 = 该篇素材在源文档中的存量占比，金色为新写。</div>
+  <div class="grid">
+
+    <div class="card p0">
+      <div class="head"><span class="no">第 1 篇</span><span class="badge b-p0">P0</span></div>
+      <h3>为什么你的 C++ 代码里到处都是 if/else new</h3>
+      <div class="meta">
+        <span class="src">素材 §1、§2</span><br>
+        <span class="key">论点：</span>直接 new 的四个问题推出工厂<br>
+        <span class="task">新增：</span>可编译对照 + 依赖图 + 系列边界声明
+      </div>
+      <div class="bar">
+        <div class="lbl"><span>2,500–3,500 字</span><span>存量 425</span></div>
+        <div class="track"><div class="exist" style="width:12%"></div><div class="new" style="width:88%"></div></div>
+      </div>
+    </div>
+
+    <div class="card p1">
+      <div class="head"><span class="no">第 2 篇</span><span class="badge b-p1">P1</span></div>
+      <h3>简单工厂、工厂方法、抽象工厂：不是三个并列模式</h3>
+      <div class="meta">
+        <span class="src">素材 §3、§4（并入 §6.4）</span><br>
+        <span class="key">论点：</span>简单工厂是 idiom；抽象工厂含族约束<br>
+        <span class="task">新增：</span>三份可编译代码 + §4.5 补"何时选哪个"列
+      </div>
+      <div class="bar">
+        <div class="lbl"><span>3,000–4,000 字</span><span>存量 408</span></div>
+        <div class="track"><div class="exist" style="width:11%"></div><div class="new" style="width:89%"></div></div>
+      </div>
+    </div>
+
+    <div class="card p2">
+      <div class="head"><span class="no">第 3 篇</span><span class="badge b-p2">P2</span></div>
+      <h3>抽象工厂实战：产品族、组合根与自注册</h3>
+      <div class="meta">
+        <span class="src">素材 §5、§6</span><br>
+        <span class="key">论点：</span>引用只许出现在组合根<br>
+        <span class="task">新增：</span>支付 demo + 时序图 + 修 §6.1 未定义的 config.platform
+      </div>
+      <div class="bar">
+        <div class="lbl"><span>3,000–4,000 字</span><span>存量 393</span></div>
+        <div class="track"><div class="exist" style="width:10%"></div><div class="new" style="width:90%"></div></div>
+      </div>
+    </div>
+
+    <div class="card p0">
+      <div class="head"><span class="no">第 4 篇</span><span class="badge b-p0">P0</span></div>
+      <h3>C++17 之后，工厂模式发生了哪些变化</h3>
+      <div class="meta">
+        <span class="src">素材 §7</span><br>
+        <span class="key">论点：</span>运行时多态仍是默认，编译期是局部优化<br>
+        <span class="task">新增：</span>§7.2 独立成节（转型 / std::move / forward 三问）+ 踩坑清单表
+      </div>
+      <div class="bar">
+        <div class="lbl"><span>3,500–4,500 字</span><span>存量 464</span></div>
+        <div class="track"><div class="exist" style="width:12%"></div><div class="new" style="width:88%"></div></div>
+      </div>
+    </div>
+
+    <div class="card p0">
+      <div class="head"><span class="no">第 5 篇</span><span class="badge b-p0">P0 · 破圈首发</span></div>
+      <h3>工厂和依赖注入，到底谁管什么</h3>
+      <div class="meta">
+        <span class="src">素材 §8、§10.6</span><br>
+        <span class="key">论点：</span>服务定位 ≠ 依赖注入<br>
+        <span class="task">新增：</span>§10.6 完整例 + 单元测试替换实现
+      </div>
+      <div class="bar">
+        <div class="lbl"><span>2,500–3,500 字</span><span>存量 315</span></div>
+        <div class="track"><div class="exist" style="width:10%"></div><div class="new" style="width:90%"></div></div>
+      </div>
+    </div>
+
+    <div class="card p2">
+      <div class="head"><span class="no">第 6 篇</span><span class="badge b-p2">P2</span></div>
+      <h3>什么时候不该用工厂：过度设计的信号</h3>
+      <div class="meta">
+        <span class="src">素材 §8.6/§8.7、§10.7</span><br>
+        <span class="key">论点：</span>没有选择逻辑的 make_unique&lt;T&gt;() 不是工厂<br>
+        <span class="task">新增：</span>正反案例对照 + 决策树（源文档仅 4 条 bullet）
+      </div>
+      <div class="bar">
+        <div class="lbl"><span>2,000–3,000 字</span><span>存量 60</span></div>
+        <div class="track"><div class="exist" style="width:3%"></div><div class="new" style="width:97%"></div></div>
+      </div>
+    </div>
+
+    <div class="card p1">
+      <div class="head"><span class="no">第 7 篇</span><span class="badge b-p1">P1 · 最重</span></div>
+      <h3>从 Fast DDS 到 Nginx：开源项目里的工厂模式</h3>
+      <div class="meta">
+        <span class="src">素材 §9、§10.1–§10.5</span><br>
+        <span class="key">论点：</span>生产级对工厂是克制的；Nginx 压轴<br>
+        <span class="task">新增：</span>Thrift / Cyber RT 补深；OpenCog、gRPC 作对照组
+      </div>
+      <div class="bar">
+        <div class="lbl"><span>4,000–5,000 字</span><span>存量 673（摊 6 项目 ≈112 字/个）</span></div>
+        <div class="track"><div class="exist" style="width:13%"></div><div class="new" style="width:87%"></div></div>
+      </div>
+    </div>
+
+    <div class="card idx">
+      <div class="head"><span class="no">第 8 篇 · 索引</span><span class="badge b-idx">P2</span></div>
+      <h3>C++ 工厂模式系列：目录与阅读路径</h3>
+      <div class="meta">
+        <span class="src">全文定位</span><br>
+        <span class="key">内容：</span>路线图 + 篇目链接 + 边界声明，不做正文<br>
+        <span class="task">时机：</span>第 7 篇发布后一次性上线 · 约 0.5 小时
+      </div>
+      <div class="bar">
+        <div class="lbl"><span>1 屏</span><span>不写独立导读篇</span></div>
+        <div class="track"><div class="keep" style="width:100%"></div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <h2>四周排期与发布批次</h2>
+  <div class="tl">
+    <div class="tlrow">
+      <div class="tlcell"><div class="w">阶段 0 · 0.5 天 · 4h</div><div class="t">定稿方案；搭 repo 骨架 + CMake，三编译器各跑通一次空构建</div></div>
+      <div class="tlcell"><div class="w">第 1 周 · 14h</div><div class="t">写第 5、1 篇<br><b>批次一：</b>第 5（破圈）+ 第 1（引流）</div></div>
+      <div class="tlcell"><div class="w">第 2 周 · 15h</div><div class="t">写第 4、2 篇<br><b>批次二：</b>第 4（差异化）+ 第 2（承接）</div></div>
+      <div class="tlcell"><div class="w">第 3 周 · 16h</div><div class="t">写第 7、3 篇<br><b>批次三：</b>第 7（案例口碑）+ 第 3（实战）</div></div>
+      <div class="tlcell"><div class="w">第 4 周 · 9h</div><div class="t">写第 6 篇 + 第 8 篇索引<br><b>批次四：</b>第 6（闭环收尾）+ 系列索引</div></div>
+    </div>
+  </div>
+  <div class="legend">
+    <span><i style="background:var(--exist)"></i>存量（可直接复用）</span>
+    <span><i style="background:var(--new)"></i>新写（须原创）</span>
+    <span><i style="background:#e6eaee"></i>不适用</span>
+    <span><b>优先级：</b>P0 首发核心 ｜ P1 主力内容 ｜ P2 深度 / 收尾</span>
+    <span><b>总工时：</b>≈ 66 小时</span>
+  </div>
+
+  <h2>§10 待展开项归属</h2>
+  <table>
+    <tr><th style="width:70px">§10 项</th><th>内容</th><th style="width:88px">归属</th><th style="width:150px">处理方式</th></tr>
+    <tr><td>10.1</td><td>Nginx 深入（完整函数指针表 / 各模块实现）</td><td>第 7 篇</td><td><span class="teaser">下篇预告</span></td></tr>
+    <tr><td>10.2</td><td>Fast DDS Pimpl 惯用法</td><td>第 7 篇</td><td><span class="teaser">下篇预告</span></td></tr>
+    <tr><td>10.3</td><td>Cyber RT ClassLoader 引用计数</td><td>第 7 篇</td><td><span class="inplace">就地补齐</span></td></tr>
+    <tr><td>10.4</td><td>Cyber RT 传输工厂 vs 组件工厂</td><td>第 7 篇</td><td><span class="inplace">就地补齐</span>（短）</td></tr>
+    <tr><td>10.5</td><td>Thrift TProtocolFactory 深入</td><td>第 7 篇</td><td><span class="inplace">就地补齐</span></td></tr>
+    <tr><td>10.6</td><td>工厂 + DI 完整小例子</td><td>第 5 篇</td><td><span class="inplace">就地补齐</span>（不预告）</td></tr>
+    <tr><td>10.7</td><td>抽象工厂过度使用反例</td><td>第 6 篇</td><td><span class="inplace">就地补齐</span>（不预告）</td></tr>
+  </table>
+
+  <h2>贯穿全系列的约束</h2>
+  <div class="notes">
+    <ul>
+      <li><b>共享一个可编译 repo。</b>第 1 篇建骨架与 CMake，之后每篇只增 <code>NN_xxx/main.cpp</code>：<code>cmake -B build &amp;&amp; cmake --build build &amp;&amp; ctest</code> 一键跑通，编译器矩阵 GCC 11+ / Clang 14+ / MSVC 19.3+。</li>
+      <li><b>开篇声明边界</b>（放在第 1 篇章首，不单独写导读篇）：本系列讲创建与装配的职责划分，<b>不覆盖</b>线程安全、异常安全、ABI 兼容；测试只演示"替换实现"。</li>
+      <li><b>每篇结尾做下篇预告</b>，且预告项必须在上表内有归属——不留无主之坑。</li>
+      <li><b>每篇图 ≥ 1 张，且优先补对比类图</b>（演化关系 / 依赖变化 / 决策树），而非再补结构图。</li>
+      <li><b>所有代码必须能编译</b>：正文代码块与 repo 文件同名同序。注意静态库 + MSVC 下自注册会被链接器裁剪，第 3、4 篇用 OBJECT 库兜底。</li>
+    </ul>
+  </div>
+
+  <div class="foot">WorkBuddy 版 v1.0 · 2026-09-16 · 配套文档：工厂模式Blog章节与计划.md（同目录）</div>
+
+</div>
+</body>
+</html>
