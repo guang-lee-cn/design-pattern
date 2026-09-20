@@ -1,10 +1,10 @@
 ---
 project: design-pattern
-updated: 2026-09-20T13:37:26+08:00
+updated: 2026-09-20T13:37:57+08:00
 phase: 内容
 step_id: S-008
 status: active
-head: 67f3fd9
+head: 9dfcc2d
 verify: python3 tools/check_pattern.py factory-pattern && cd factory-pattern/code && cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build -j
 ---
 
