@@ -1,21 +1,21 @@
-# 每一节对应一个子目录。目录未创建时自动跳过，
-# 因此新增内容时不需要改动本文件，也不需要改动任何已有文件。
-set(FP_PART_DIRS
-    01_what_is_it
-    02_cost
-    03_classification
-    04_code_compare
-    05_scenarios
-    06_assembly
-    07_language_evolution
-    08_boundaries
-    09_read_the_sources)
+# Auto-discover every scenario program: src/<section>/<scene>/*.cpp.
+# Adding a new section or scenario needs NO edit to any CMakeLists.txt;
+# just create the directory and drop old.cpp / new.cpp into it.
+#
+# Target (and executable) names carry the full path:
+#   src/02_cost/01_select/old.cpp -> 02_cost_01_select_old
+# emitted under build/src/. The section prefix prevents target name clashes
+# when different sections reuse the same scenario number.
+file(GLOB_RECURSE FP_SOURCES
+     CONFIGURE_DEPENDS
+     RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
+     "${CMAKE_CURRENT_SOURCE_DIR}/*/*/*.cpp")
 
-foreach(part IN LISTS FP_PART_DIRS)
-  if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${part}/CMakeLists.txt")
-    message(STATUS "factory-pattern: 纳入 ${part}")
-    add_subdirectory(${part})
-  else()
-    message(STATUS "factory-pattern: 跳过 ${part}（尚未编写）")
-  endif()
+foreach(src IN LISTS FP_SOURCES)
+  get_filename_component(scene_dir "${src}" DIRECTORY)        # 02_cost/01_select
+  get_filename_component(section   "${scene_dir}" DIRECTORY)  # 02_cost
+  get_filename_component(scene     "${scene_dir}" NAME)       # 01_select
+  get_filename_component(kind      "${src}" NAME_WE)          # old / new
+  set(target "${section}_${scene}_${kind}")
+  add_executable("${target}" "${src}")
 endforeach()
