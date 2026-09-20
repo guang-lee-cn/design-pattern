@@ -10,6 +10,7 @@
 |---|---|---|---|---|---|---|
 | S-000 | 工作区从 `D:\liguang` 迁至 WSL 并重排目录 | `design-pattern/**` | `find . -type f -not -path './.git/*' \| wc -l` → 54 | — | done | 首次提交一并定格 |
 | S-001 | 接入 small-step-loop 协议（v2） | `STATE.md` `ITERATION_PLAN.md` `DECISIONS.md` `.gitignore` `README.md` | `python3 skills/small-step-loop/scripts/check_state.py .` | S-000 | done | 首次提交一并定格 |
+| S-002 | 修正 §7.2 隐式移动的版本错误（迁移验收时编译器抓出） | `code/src/04_modern_cpp17/probe_unique_ptr.cpp` + `posts/04-*.md` | `cd code && cmake --build build -j && ctest --test-dir build` | S-001 | done | 见 git log |
 
 > S-000 / S-001 是 git 初始化前的产物，其 commit 列在首次提交里一并定格，不单独列 hash。
 
@@ -47,6 +48,7 @@
 |---|---|---|
 | "迁移 + 协议接入"（原计划一步） | S-000 / S-001 | 结构上独立：迁移是文件系统操作（且必须先于 `git init`），协议接入是新增元文件 |
 | S-040（原并入第 7 篇） | S-040 / S-041 | 回源核验是**独立可验证**的调研产物，与写作不同源；且核验结论可能推翻文章结构 |
+| —（计划外插入） | S-002（新增单元） | 迁移验收时编译器报错，暴露第 4 篇代码**从未被编译过**。根因已定位，按 §3.2 硬条件 4 立即修复。**教训：迁移必须带编译验证** |
 
 ## 非目标（本阶段明确不做）
 
