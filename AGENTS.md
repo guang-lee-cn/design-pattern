@@ -60,27 +60,31 @@ python3 tools/check_state.py . --resume   # 打印状态卡（先看有没有 [!
 
 ## 4. 配套工程：同一套命令，人机都能一键运行
 
-`code/` 工程只维护**一套**构建，运行入口分两级：
+`code/` 工程只维护**一套**构建。
 
-- 工程根 `run.sh`：构建并运行**全部**节、全部场景；
-- `src/<节>/run.sh`：构建并运行**本节**全部场景（如 `src/02_cost/run.sh`）。
+**目录与 CMake（两层，零登记）：**
 
-两级入口都跑同一条 cmake 配置与构建命令，不另建脚本；场景目录（`src/<节>/<场景>/`）**不放脚本**，只放 `old.cpp`/`new.cpp`；需要单独调试某个场景时，直接运行对应 build 目录下的可执行文件。
+- 工程根 `CMakeLists.txt`：全局设置（语言标准、警告选项、默认构建类型、顶层 `include/`）；
+- `src/CMakeLists.txt`：用 `file(GLOB_RECURSE ... CONFIGURE_DEPENDS)` 自动发现 `src/<节>/<场景>/*.cpp`，每个 cpp 生成一个可执行；**节目录、场景目录一律不放 CMakeLists.txt**；
+- target 与可执行名 = `<节>_<场景>_old|new`（如 `02_cost_01_select_old`，产物在 `build/src/`）；节前缀防止不同节复用同一场景序号时 target 重名；
+- 新增节或场景 = 只建目录、只放 `old.cpp`/`new.cpp`，不改动任何 CMake。
 
-**构建类型**：入口脚本接受参数 `sh run.sh [Release|Debug]`（同时认 `BUILD_TYPE` 环境变量，默认 Release）。Release 产物在 `build/`，Debug 产物在 `build-debug/`，分目录存放，避免反复切换触发全量重编。单配置生成器（Make/Ninja）由此切换；多配置生成器（MSVC）暂不专门处理。Debug 专属编译/链接选项（如 sanitizer）等出现真实需要时再以 `option()` 引入，不预先堆砌。
+**运行入口（工程根唯一脚本）：**
 
-**清理**：工程根 `clean.sh`（POSIX sh）删除全部构建产物目录；清理动作只在工程根做，节级不放清理脚本。
+- `sh run.sh [Release|Debug] [节] [场景]`，参数顺序任意，也认 `BUILD_TYPE` 环境变量；不带节/场景 = 构建并运行全部；只带节（如 `sh run.sh 02_cost`）= 只构建并运行该节；带节+场景（`sh run.sh 02_cost 01_select`）= 只运行该场景的 old/new。指定范围时用 `cmake --build --target` 精确构建，不扩大构建面；
+- Release 产物在 `build/`，Debug 产物在 `build-debug/`，分目录避免反复切换触发全量重编；
+- 工程根 `clean.sh`（POSIX sh）删除全部构建产物目录；节目录与场景目录不放任何脚本。
 
-所有 `run.sh`、`clean.sh` 用 **POSIX sh** 编写（`#!/bin/sh`；不得使用 `pipefail`、`BASH_SOURCE`、`[[ ]]` 等 bash 专有语法，路径取自 `$0`），因此 `./run.sh`、`sh run.sh`、`bash run.sh` 三种调用方式等价，在任意子目录里直接 `sh <脚本>` 即可，无需可执行权限。
+所有 `run.sh`、`clean.sh` 用 **POSIX sh** 编写（`#!/bin/sh`；不得使用 `pipefail`、`BASH_SOURCE`、`[[ ]]` 等 bash 专有语法，路径取自 `$0`），因此 `./run.sh`、`sh run.sh`、`bash run.sh` 三种调用方式等价，无需可执行权限。
 
 这套入口同时是：
 
-- **人工一键运行**：使用者本人照该模式 `README.md` 或直接运行上述脚本，不需要助手代劳，也不预设工程化背景；
+- **人工一键运行**：使用者本人直接运行上述脚本，不需要助手代劳，也不预设工程化背景；
 - **AI 一键运行**：助手凭 `STATE.md` 的 `verify` 字段，用**同一套命令**完成构建与运行（含对照输出比对）。
 
 不为人和 AI 维护两套脚本；命令超过一条就串成一个入口。
 
-更多工程能力（测试框架、CTest、CI、安装规则、打包等）**暂不展开**：需要时先在对话里讨论、明确动机后再加，不预先堆砌。
+更多工程能力（测试框架、CTest、CI、安装规则、打包、sanitizer 开关等）**暂不展开**：需要时先在对话里讨论、明确动机后再加，不预先堆砌。
 
 ## 5. 内容体例（硬约定）
 
