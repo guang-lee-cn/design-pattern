@@ -1,10 +1,17 @@
 # 构建产物
 build/
 cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+CTestTestfile.cmake
+cmake_install.cmake
+Testing/
 *.o
 *.a
 *.so
+*.dylib
 *.d
+*.exe
 
 # Python
 __pycache__/
@@ -14,4 +21,6 @@ __pycache__/
 .vscode/
 .idea/
 .DS_Store
+Thumbs.db
 *.swp
+*.tmp

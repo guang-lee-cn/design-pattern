@@ -1,42 +1,45 @@
 # design-pattern
 
-C++ 设计模式系列文章的写作与配套代码工作区。
+C++ 设计模式实践库。**一个模式一个自包含文件夹**——演化背景、知识拆解、可编译代码、问题复盘都在同一处，互不依赖。
 
-## 布局
+## 目录约定
 
-| 路径 | 内容 |
-|---|---|
-| `factory-pattern/` | 《C++ 工厂模式》系列：文章、计划、路线图 |
-| `factory-pattern/posts/` | 正式正文（markdown + 内嵌 Mermaid） |
-| `factory-pattern/plan/` | 章节计划、系列路线图 |
-| `factory-pattern/archive/` | 历史形态产物（docx / html），仅作参考 |
-| `code/` | 配套 C++ 代码仓库（CMake，逐篇增量增长） |
-| `refs/` | 源素材与评审记录（**不改写**，仅作溯源） |
-| `skills/small-step-loop/` | 协同工作协议副本（真身在 `~/.workbuddy/skills/`） |
-
-## 协作方式
-
-本项目按 `skills/small-step-loop/` 协议推进：**小步迭代、间奏可停、断点快启**。
-
-- **恢复入口**：本目录的 `STATE.md`（唯一）。新会话第一步读它。
-- **队列**：`ITERATION_PLAN.md`，一行一个可独立提交的单元，粒度 = 内容结构上的一个"节"。
-- **决策**：`DECISIONS.md`，已定型的事不再重复讨论。
-- **git**：一迭代一提交；同步 `STATE.md` 的提交用 `chore(state):` 前缀。
-
-```bash
-# 恢复：对齐状态，不产出内容
-cat STATE.md
-python3 skills/small-step-loop/scripts/check_state.py . --resume
+```
+<pattern-name>/
+├── README.md     该模式的导航（从哪读起）
+├── plan/         系列内容大纲与路线图
+├── docs/         正文（markdown + 内嵌 Mermaid）
+├── code/         配套 C++ 工程，独立可编译
+├── notes/        问题记录与复盘
+└── refs/         素材与溯源，只读
 ```
 
-## 代码
+新增一个模式 = 新建一个同名文件夹。模式之间不共享代码，也不共享构建。
+
+## 模式清单
+
+| 目录 | 分类 | 状态 |
+|---|---|---|
+| [`factory-pattern/`](factory-pattern/) | 创建型 | 进行中（3/8 篇） |
+
+## 快速开始
 
 ```bash
-cd code
+cd factory-pattern/code
 cmake -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j
 ctest --test-dir build --output-on-failure
 ```
 
-要求 C++17 及以上（第 4 篇用到 `std::optional` / `if constexpr` / 自注册装置）。
-`src/CMakeLists.txt` 按子目录存在性自动纳入，**新增篇章无需改动已有文件**。
+需要 CMake ≥ 3.16，以及支持 C++17 的编译器（GCC 9+ / Clang 10+ / MSVC 19.20+）。
+
+## 体例约定
+
+- **代码块逐块标注来源。** 出自配套工程的标 `// <pattern>/code/<路径>`，示意代码标"不在配套工程中"。读者据此判断哪一段能直接拿去编译。
+- **涉及 C++ 标准版本差异的论断，必须落成一个能被编译器检查的装置**，不能只写在正文里。起因见 [`factory-pattern/notes/`](factory-pattern/notes/)。
+- **图统一用 Mermaid 内嵌**，不依赖任何外部渲染服务。
+- `refs/` 是只读溯源素材；与正文冲突时以正文为准，冲突记入对应模式的 `notes/`。
+
+## 协作
+
+读取本仓库的编码助手请先看 [`AGENTS.md`](AGENTS.md)；进度锚点是 [`STATE.md`](STATE.md)。
