@@ -11,6 +11,7 @@
 | S-000 | 工作区从 `D:\liguang` 迁至 WSL 并重排目录 | `design-pattern/**` | `find . -type f -not -path './.git/*' \| wc -l` → 54 | — | done | 首次提交一并定格 |
 | S-001 | 接入 small-step-loop 协议（v2） | `STATE.md` `ITERATION_PLAN.md` `DECISIONS.md` `.gitignore` `README.md` | `python3 skills/small-step-loop/scripts/check_state.py .` | S-000 | done | 首次提交一并定格 |
 | S-002 | 修正 §7.2 隐式移动的版本错误（迁移验收时编译器抓出） | `code/src/04_modern_cpp17/probe_unique_ptr.cpp` + `posts/04-*.md` | `cd code && cmake --build build -j && ctest --test-dir build` | S-001 | done | 见 git log |
+| S-003 | 技能 v2.1：初始化单元的 verify 必须含真实构建 | `skills/small-step-loop/SKILL.md` | `diff -r` 真身与副本 | S-002 | done | 见 git log |
 
 > S-000 / S-001 是 git 初始化前的产物，其 commit 列在首次提交里一并定格，不单独列 hash。
 

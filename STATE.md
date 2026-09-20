@@ -1,11 +1,11 @@
 ---
 project: design-pattern
-updated: 2026-09-20T11:30:00+08:00
+updated: 2026-09-20T11:45:00+08:00
 phase: P0 基础设施
-step_id: S-002
+step_id: S-003
 status: done
-head: 36b6e51
-verify: cd code && cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build -j && ctest --test-dir build --output-on-failure
+head: d66f985
+verify: diff -r /mnt/c/Users/husci/.workbuddy/skills/small-step-loop skills/small-step-loop
 ---
 
 ## 已完成（含验证证据）
@@ -18,6 +18,8 @@ verify: cd code && cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build bu
   `cmake --build` + `ctest` → EXIT=0、**零 warning**、2/2 通过；
   `probe_unique_ptr` 打印 `__cplusplus=201703` 自证走 C++17 分支；
   mermaid 渲染 4/4 OK；代码来源核对 19 块、0 块需补标注
+- [S-003] 技能 v2.1：把本轮暴露的"形式指标"缺口补进协议 ——
+  `diff -r` 真身与副本 → 逐字节一致；SKILL.md 365 行（上限 500）
 
 ## 下一步（唯一）
 
@@ -37,6 +39,7 @@ verify: cd code && cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build bu
 - D-011 第 7 篇的 6 个开源项目必须逐条回源核验（Fast DDS 已核 1/6，发现转述错误）
 - D-012 **代码"写完了"不等于"写对了"**：第 4 篇 §7.2 的错误证明未编译过的代码不可信。
   凡涉及语言规则的论断，必须落到一个能被编译器检查的装置上
+- D-013 `refs/` 与 `factory-pattern/archive/` 内的文件**只读**；真身只有 WSL 侧一份
 
 ## 待拍板（≤1）
 
