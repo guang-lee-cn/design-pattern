@@ -283,6 +283,7 @@ flowchart LR
 工厂版本里有一行，现在看着有点刺眼：
 
 ```cpp
+// src/01_if_else_new/order_flow_factory.cpp（节选）
 auto logger = LoggerFactory::create(logger_kind);
 if (!logger) {
     throw std::invalid_argument("unknown logger kind: " + logger_kind);
