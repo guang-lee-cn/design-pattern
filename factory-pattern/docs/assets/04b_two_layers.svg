@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 356" width="680" height="356" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect width="680" height="356" fill="#ffffff"/>
+
+  <text x="24" y="30" font-size="16" font-weight="700" fill="#1f2937">函数名变成指针，发生在哪一层</text>
+  <text x="24" y="50" font-size="12" fill="#5b6472">写 <tspan font-family="ui-monospace, Menlo, monospace">std::function&lt;R()&gt; fn = make_temp;</tspan> 这一句时，代码里同时出现了两层，别把它们当成一层。</text>
+
+  <!-- 编译期：模板参数层 -->
+  <rect x="24" y="68" width="632" height="58" rx="6" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="40" y="89" font-size="10.5" font-weight="700" fill="#5b6472">编译期 · 模板参数位置</text>
+  <text x="40" y="110" font-size="11.5" fill="#1f2937" font-family="ui-monospace, Menlo, monospace">std::function&lt;R()&gt;</text>
+  <text x="180" y="110" font-size="10.5" fill="#5b6472">← 这里只要「类型名」，签名描述即可；写成 <tspan font-family="ui-monospace, Menlo, monospace">R(*)()</tspan> 编译报 incomplete type</text>
+
+  <!-- 运行期：实参传递层 -->
+  <rect x="24" y="150" width="632" height="26" rx="4" fill="#eef7f0" stroke="#c2ddca"/>
+  <text x="40" y="168" font-size="10.5" font-weight="700" fill="#276749">运行期 · 实参传递位置　——　函数名在这里退化成指针</text>
+
+  <rect x="40" y="190" width="168" height="72" rx="6" fill="#ffffff" stroke="#a9d4b8" stroke-dasharray="4 3"/>
+  <text x="124" y="214" font-size="11" font-weight="700" fill="#1f2937" text-anchor="middle" font-family="ui-monospace, Menlo, monospace">make_temp</text>
+  <text x="124" y="233" font-size="10.5" fill="#5b6472" text-anchor="middle">函数实体</text>
+  <text x="124" y="251" font-size="10" fill="#8a929c" text-anchor="middle">不是值</text>
+
+  <path d="M 212 226 L 252 226" fill="none" stroke="#a9d4b8" stroke-width="1.5"/>
+  <path d="M 252 226 L 244 222 L 244 230 z" fill="#a9d4b8"/>
+  <text x="232" y="218" font-size="10" font-weight="700" fill="#276749" text-anchor="middle">decay</text>
+
+  <rect x="260" y="190" width="152" height="72" rx="6" fill="#ffffff" stroke="#a9d4b8"/>
+  <text x="336" y="214" font-size="11" font-weight="700" fill="#276749" text-anchor="middle" font-family="ui-monospace, Menlo, monospace">&amp;make_temp</text>
+  <text x="336" y="233" font-size="10.5" fill="#5b6472" text-anchor="middle">函数指针 8 字节</text>
+  <text x="336" y="251" font-size="10" fill="#8a929c" text-anchor="middle">是一个值</text>
+
+  <path d="M 416 226 L 456 226" fill="none" stroke="#a9d4b8" stroke-width="1.5"/>
+  <path d="M 456 226 L 448 222 L 448 230 z" fill="#a9d4b8"/>
+  <text x="436" y="218" font-size="10" fill="#5b6472" text-anchor="middle">装入</text>
+
+  <rect x="464" y="190" width="176" height="72" rx="6" fill="#ffffff" stroke="#a9d4b8"/>
+  <text x="552" y="214" font-size="11" font-weight="700" fill="#1f2937" text-anchor="middle" font-family="ui-monospace, Menlo, monospace">缓冲 16 字节</text>
+  <text x="552" y="233" font-size="10.5" fill="#5b6472" text-anchor="middle">＋两个函数指针</text>
+  <text x="552" y="251" font-size="10" fill="#8a929c" text-anchor="middle">合计 32 字节</text>
+
+  <!-- 结论 -->
+  <rect x="24" y="278" width="632" height="62" rx="6" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="40" y="300" font-size="12" fill="#1f2937">「模板参数写函数类型」和「函数名退化成指针」不是一回事 —— <tspan font-weight="700">前者只写类型名，后者才有地址</tspan>。</text>
+  <text x="40" y="322" font-size="12" fill="#5b6472">所以 <tspan font-family="ui-monospace, Menlo, monospace">std::function&lt;R()&gt;</tspan> 和函数指针并不矛盾：它吃得下指针，但它的模板参数永远不是指针。</text>
+
+</svg>
