@@ -1,4 +1,6 @@
-<svg viewBox="0 0 680 232" role="img" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;font-family:var(--font-sans)">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 232" width="680" height="232" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect width="680" height="232" fill="#ffffff"/>
+
 <title>缓存工厂的悬垂指针时序</title>
 <desc>工厂创建对象并把地址写进缓存；调用方删除对象后缓存仍指向该地址；再次获取时读到已释放内存，被 AddressSanitizer 捕获。</desc>
 
