@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 384" width="680" height="384" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect width="680" height="384" fill="#ffffff"/>
+
+  <text x="24" y="30" font-size="16" font-weight="700" fill="#1f2937">同样是 8 字节，一次间接的差别</text>
+  <text x="24" y="50" font-size="12" fill="#5b6472">左边整块在栈上，右边栈上只有一个地址——要到函数体，右边必须先读一次内存。</text>
+
+  <!-- ================= 左：variant ================= -->
+  <text x="26" y="82" font-size="12.5" font-weight="700" fill="#1b5e20">variant｜值语义，一个对象 = 一块内存</text>
+
+  <text x="40" y="106" font-size="10.5" fill="#7a828e">0x00</text>
+  <text x="144" y="106" font-size="10.5" fill="#7a828e">0x04</text>
+  <rect x="40" y="110" width="104" height="46" rx="4" fill="#e8f0fe" stroke="#c7d7f5"/>
+  <text x="92" y="130" font-size="11.5" font-weight="700" fill="#1f4e79" text-anchor="middle">判别标签</text>
+  <text x="92" y="147" font-size="10.5" fill="#5b6472" text-anchor="middle">4B · tag = 0/1/2</text>
+  <rect x="144" y="110" width="104" height="46" rx="4" fill="#e8f5e9" stroke="#a5d6a7"/>
+  <text x="196" y="130" font-size="11.5" font-weight="700" fill="#1b5e20" text-anchor="middle">值</text>
+  <text x="196" y="147" font-size="10.5" fill="#5b6472" text-anchor="middle">4B · 三个成员共用</text>
+
+  <text x="40" y="182" font-size="11.5" fill="#1f2937">tag = 0  →  TempSensor</text>
+  <text x="40" y="200" font-size="11.5" fill="#1f2937">tag = 1  →  PressureSensor</text>
+  <text x="40" y="218" font-size="11.5" fill="#1f2937">tag = 2  →  HumiditySensor</text>
+
+  <rect x="40" y="234" width="290" height="42" rx="6" fill="#e8f5e9" stroke="#a5d6a7"/>
+  <text x="52" y="252" font-size="11" fill="#1b5e20">sizeof(Sensor) = 8，栈上（实测 0x7fff…）</text>
+  <text x="52" y="268" font-size="11" fill="#1b5e20">没有 new、没有虚表、不分两块</text>
+
+  <!-- ================= 右：工厂方案 ================= -->
+  <text x="358" y="82" font-size="12.5" font-weight="700" fill="#7a3e00">工厂方案｜指针语义，对象在堆上</text>
+
+  <rect x="368" y="110" width="150" height="40" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="380" y="135" font-size="11.5" fill="#1f2937">Sensor* p</text>
+  <text x="506" y="135" font-size="10.5" fill="#5b6472" text-anchor="end">8B</text>
+
+  <path d="M 400 152 L 400 176" stroke="#a0aec0" stroke-width="1.4"/>
+  <path d="M 396 174 L 400 182 L 404 174 z" fill="#a0aec0"/>
+  <text x="414" y="170" font-size="10.5" fill="#8a929c">第一次读内存：取对象地址</text>
+
+  <rect x="368" y="184" width="76" height="40" rx="4" fill="#fde8e8" stroke="#e57373"/>
+  <text x="406" y="209" font-size="11.5" font-weight="700" fill="#b3261e" text-anchor="middle">vptr</text>
+  <rect x="448" y="184" width="70" height="40" rx="4" fill="#f6f7f9" stroke="#dfe4ea"/>
+  <text x="483" y="209" font-size="11" fill="#8a929c" text-anchor="middle">成员</text>
+  <text x="534" y="209" font-size="10.5" fill="#8a929c">← 对象本体在堆上</text>
+
+  <path d="M 406 226 L 406 250" stroke="#e57373" stroke-width="1.4"/>
+  <path d="M 402 248 L 406 256 L 410 248 z" fill="#e57373"/>
+  <text x="420" y="244" font-size="10.5" fill="#b3261e">第二次读内存：取 read() 地址</text>
+
+  <rect x="368" y="258" width="184" height="34" rx="4" fill="#fde8e8" stroke="#e57373"/>
+  <text x="460" y="280" font-size="11.5" fill="#b3261e" text-anchor="middle">vtable → read()</text>
+
+  <!-- 结论 -->
+  <rect x="24" y="298" width="632" height="64" rx="6" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="40" y="318" font-size="12" fill="#1f2937">两者占的字节数一样（8B）。<tspan font-weight="700">差的是「要拿到函数体，得先去内存里取几次地址」</tspan>：</text>
+  <text x="40" y="336" font-size="12" fill="#1f2937">variant 靠 tag 在编译期定分支（0 次），工厂方案靠 vptr 在运行期找（1~2 次）。</text>
+  <text x="40" y="354" font-size="12" fill="#5b6472">这也是为什么 0.339 会低于 0.822 —— 「不用工厂」 的那条基线，本身也是虚调用。</text>
+</svg>
