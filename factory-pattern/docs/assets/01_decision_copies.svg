@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 444" width="680" height="444" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect width="680" height="444" fill="#ffffff"/>
+
+  <text x="24" y="30" font-size="16" font-weight="700" fill="#1f2937">一处决策，四份拷贝</text>
+  <text x="24" y="50" font-size="12" fill="#5b6472">同一个「按类型创建传感器」的 if-else，在 4 个不相关的翻译单元里各抄了一份 —— 四份会各自漂移的真相。</text>
+
+  <!-- 决策源 -->
+  <rect x="170" y="68" width="340" height="34" rx="6" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="340" y="90" font-size="12" font-weight="700" fill="#1f2937" text-anchor="middle">决策：按 type 创建 Sensor（同一个 if-else）</text>
+
+  <!-- 分叉到 4 个 TU -->
+  <path d="M 340 102 C 340 128, 96 128, 96 154" fill="none" stroke="#c9d4e2" stroke-width="1.4"/>
+  <path d="M 340 102 C 340 128, 258 128, 258 154" fill="none" stroke="#c9d4e2" stroke-width="1.4"/>
+  <path d="M 340 102 C 340 128, 420 128, 420 154" fill="none" stroke="#c9d4e2" stroke-width="1.4"/>
+  <path d="M 340 102 C 340 128, 582 128, 582 154" fill="none" stroke="#c9d4e2" stroke-width="1.4"/>
+
+  <!-- TU1 -->
+  <rect x="24" y="154" width="145" height="94" rx="6" fill="#e8f0fe" stroke="#c7d7f5"/>
+  <text x="36" y="178" font-size="11.5" font-weight="700" fill="#1f2937">TU1</text>
+  <text x="36" y="198" font-size="10.5" fill="#1f2937" font-family="ui-monospace, Menlo, monospace">init_module()</text>
+  <text x="36" y="218" font-size="10.5" fill="#5b6472">if-else 拷贝 ①</text>
+  <text x="36" y="238" font-size="10.5" fill="#8a929c">团队 A</text>
+
+  <!-- TU2 -->
+  <rect x="186" y="154" width="145" height="94" rx="6" fill="#e8f0fe" stroke="#c7d7f5"/>
+  <text x="198" y="178" font-size="11.5" font-weight="700" fill="#1f2937">TU2</text>
+  <text x="198" y="198" font-size="10.5" fill="#1f2937" font-family="ui-monospace, Menlo, monospace">selftest_module()</text>
+  <text x="198" y="218" font-size="10.5" fill="#5b6472">if-else 拷贝 ②</text>
+  <text x="198" y="238" font-size="10.5" fill="#8a929c">团队 B</text>
+
+  <!-- TU3 -->
+  <rect x="348" y="154" width="145" height="94" rx="6" fill="#e8f0fe" stroke="#c7d7f5"/>
+  <text x="360" y="178" font-size="11.5" font-weight="700" fill="#1f2937">TU3</text>
+  <text x="360" y="198" font-size="10.5" fill="#1f2937" font-family="ui-monospace, Menlo, monospace">diag_module()</text>
+  <text x="360" y="218" font-size="10.5" fill="#5b6472">if-else 拷贝 ③</text>
+  <text x="360" y="238" font-size="10.5" fill="#8a929c">平台团队</text>
+
+  <!-- TU4 -->
+  <rect x="510" y="154" width="145" height="94" rx="6" fill="#e8f0fe" stroke="#c7d7f5"/>
+  <text x="522" y="178" font-size="11.5" font-weight="700" fill="#1f2937">TU4</text>
+  <text x="522" y="198" font-size="10.5" fill="#1f2937" font-family="ui-monospace, Menlo, monospace">stub_module()</text>
+  <text x="522" y="218" font-size="10.5" fill="#5b6472">if-else 拷贝 ④</text>
+  <text x="522" y="238" font-size="10.5" fill="#8a929c">QA</text>
+
+  <!-- 4 处都要改 -->
+  <rect x="69" y="258" width="54" height="20" rx="4" fill="#fde8e8" stroke="#e57373"/>
+  <text x="96" y="272" font-size="11" font-weight="700" fill="#b3261e" text-anchor="middle">要改</text>
+  <rect x="231" y="258" width="54" height="20" rx="4" fill="#fde8e8" stroke="#e57373"/>
+  <text x="258" y="272" font-size="11" font-weight="700" fill="#b3261e" text-anchor="middle">要改</text>
+  <rect x="393" y="258" width="54" height="20" rx="4" fill="#fde8e8" stroke="#e57373"/>
+  <text x="420" y="272" font-size="11" font-weight="700" fill="#b3261e" text-anchor="middle">要改</text>
+  <rect x="555" y="258" width="54" height="20" rx="4" fill="#fde8e8" stroke="#e57373"/>
+  <text x="582" y="272" font-size="11" font-weight="700" fill="#b3261e" text-anchor="middle">要改</text>
+
+  <text x="340" y="298" font-size="12" fill="#1f2937" text-anchor="middle">新增 HumiditySensor：4 处 if-else 全部失效，且 4 个团队要在同一时间窗口里改</text>
+
+  <!-- 对照 -->
+  <rect x="24" y="314" width="304" height="58" rx="6" fill="#fdf6f6" stroke="#e57373"/>
+  <text x="40" y="336" font-size="11.5" font-weight="700" fill="#b3261e">直接 new</text>
+  <text x="40" y="356" font-size="11" fill="#5b6472">4 处修改 · 4 轮回归测试 · 4 个团队协调</text>
+
+  <rect x="352" y="314" width="304" height="58" rx="6" fill="#e8f5e9" stroke="#a5d6a7"/>
+  <text x="368" y="336" font-size="11.5" font-weight="700" fill="#1b5e20">工厂集中后</text>
+  <text x="368" y="356" font-size="11" fill="#5b6472">改 1 处 → 4 处同时生效 · 跨团队协调 0</text>
+
+  <!-- 结论 -->
+  <rect x="24" y="386" width="632" height="44" rx="6" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="40" y="406" font-size="12" fill="#1f2937">关键不在「多写 4 行代码」，而在<tspan font-weight="700">4 个不相关团队要在同一时间窗口改同一个决策</tspan>。</text>
+  <text x="40" y="424" font-size="12" fill="#5b6472">合并冲突、漏改某处、节奏不一致 —— 这才是真实工程成本。</text>
+
+</svg>

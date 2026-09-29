@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 400" width="680" height="400" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect width="680" height="400" fill="#ffffff"/>
+
+  <text x="24" y="30" font-size="16" font-weight="700" fill="#1f2937">同一条 if，为什么一半测不到</text>
+  <text x="24" y="50" font-size="12" fill="#5b6472">不是测试写得不好 —— 是被测函数里根本没有能喂进去的输入。</text>
+
+  <!-- ================= 左：before ================= -->
+  <rect x="24" y="64" width="316" height="260" rx="8" fill="#fbfcfd" stroke="#e3e8ef"/>
+  <text x="40" y="88" font-size="12.5" font-weight="700" fill="#1f2937">before · 产品在函数体里造</text>
+
+  <rect x="40" y="100" width="284" height="52" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="52" y="120" font-size="10.5" fill="#1f2937" font-family="ui-monospace, Menlo, monospace">RealSensor s;</text>
+  <text x="324" y="120" font-size="10.5" fill="#8a929c" text-anchor="end">← 产品在函数体里造</text>
+  <text x="52" y="138" font-size="10.5" fill="#1f2937" font-family="ui-monospace, Menlo, monospace">if (s.read() &gt; 100)</text>
+  <text x="324" y="138" font-size="10.5" fill="#8a929c" text-anchor="end">← read() 恒 42</text>
+
+  <path d="M 52 152 L 52 237" fill="none" stroke="#c9d4e2" stroke-width="1.4"/>
+  <path d="M 52 189 L 64 189" fill="none" stroke="#e57373" stroke-width="1.4"/>
+  <path d="M 52 237 L 64 237" fill="none" stroke="#c9d4e2" stroke-width="1.4"/>
+
+  <rect x="64" y="165" width="260" height="48" rx="4" fill="#fde8e8" stroke="#e57373" stroke-dasharray="4 3"/>
+  <text x="76" y="187" font-size="11" font-weight="700" fill="#b3261e">if 真 → 返回 true</text>
+  <text x="316" y="187" font-size="11" font-weight="700" fill="#b3261e" text-anchor="end">taken 0</text>
+  <text x="76" y="204" font-size="10" fill="#b3261e">没有任何输入能让它进来</text>
+
+  <rect x="64" y="221" width="260" height="32" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="76" y="241" font-size="11" fill="#1f2937">if 假 → 返回 false</text>
+  <text x="316" y="241" font-size="11" fill="#8a929c" text-anchor="end">taken 1</text>
+
+  <text x="40" y="284" font-size="13" font-weight="700" fill="#b3261e">分支覆盖率 50%</text>
+  <text x="40" y="302" font-size="10.5" fill="#5b6472">1 / 2 条分支命中</text>
+
+  <!-- ================= 右：after ================= -->
+  <rect x="340" y="64" width="316" height="260" rx="8" fill="#fbfcfd" stroke="#e3e8ef"/>
+  <text x="356" y="88" font-size="12.5" font-weight="700" fill="#1f2937">after · 产品从外部注入</text>
+
+  <rect x="356" y="100" width="284" height="52" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="368" y="120" font-size="10.5" fill="#1f2937" font-family="ui-monospace, Menlo, monospace">AlarmService(ISensor&amp;)</text>
+  <text x="640" y="120" font-size="10.5" fill="#8a929c" text-anchor="end">← 留了接缝</text>
+  <text x="368" y="138" font-size="10.5" fill="#1f2937" font-family="ui-monospace, Menlo, monospace">if (s.read() &gt; 100)</text>
+  <text x="640" y="138" font-size="10.5" fill="#8a929c" text-anchor="end">← 42 / 150 都能喂</text>
+
+  <path d="M 368 152 L 368 237" fill="none" stroke="#c9d4e2" stroke-width="1.4"/>
+  <path d="M 368 189 L 380 189" fill="none" stroke="#a5d6a7" stroke-width="1.4"/>
+  <path d="M 368 237 L 380 237" fill="none" stroke="#a5d6a7" stroke-width="1.4"/>
+
+  <rect x="380" y="165" width="260" height="48" rx="4" fill="#e8f5e9" stroke="#a5d6a7"/>
+  <text x="392" y="187" font-size="11" font-weight="700" fill="#1b5e20">if 真 → 返回 true</text>
+  <text x="632" y="187" font-size="11" font-weight="700" fill="#1b5e20" text-anchor="end">taken 1</text>
+  <text x="392" y="204" font-size="10" fill="#1b5e20">喂 150 就能进来</text>
+
+  <rect x="380" y="221" width="260" height="32" rx="4" fill="#e8f5e9" stroke="#a5d6a7"/>
+  <text x="392" y="241" font-size="11" fill="#1b5e20">if 假 → 返回 false</text>
+  <text x="632" y="241" font-size="11" font-weight="700" fill="#1b5e20" text-anchor="end">taken 1</text>
+
+  <text x="356" y="284" font-size="13" font-weight="700" fill="#1b5e20">分支覆盖率 100%</text>
+  <text x="356" y="302" font-size="10.5" fill="#5b6472">2 / 2 条分支命中 · 生产代码改动 0 行</text>
+
+  <!-- 结论 -->
+  <rect x="24" y="344" width="632" height="44" rx="6" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="40" y="364" font-size="12" fill="#1f2937">想让 true 侧可达，只有两条路：<tspan font-weight="700">改被测产品的返回值</tspan>，或<tspan font-weight="700">给被测类加一个注入点</tspan>。</text>
+  <text x="40" y="382" font-size="12" fill="#5b6472">两条路都要动生产代码 —— 改完的版本已经不是被测对象了。那不是测试。</text>
+
+</svg>
