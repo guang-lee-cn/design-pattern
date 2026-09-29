@@ -1,0 +1,5 @@
+# 模块清单 —— 对应 nginx auto/modules 里的 $modules 变量
+# 新增一个模块：只在这里加一行，然后重新生成。没有别的文件需要改。
+mod_core
+mod_http
+mod_log
