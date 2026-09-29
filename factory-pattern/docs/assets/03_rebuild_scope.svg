@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 444" width="680" height="444" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect width="680" height="444" fill="#ffffff"/>
+
+  <defs>
+    <marker id="ar3" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 8 4 L 0 8 z" fill="#e57373"/>
+    </marker>
+    <marker id="ar3g" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 8 4 L 0 8 z" fill="#66bb6a"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="30" font-size="16" font-weight="700" fill="#1f2937">同一个改动，两条传播路径</text>
+  <text x="24" y="50" font-size="12" fill="#5b6472">改一个具体传感器的头文件，编译期的影响会沿 include 反向扩散。中间有没有一层挡着，结果完全不同。</text>
+
+  <!-- 改动源 -->
+  <rect x="230" y="74" width="220" height="42" rx="6" fill="#fdecea" stroke="#e57373" stroke-width="1.6"/>
+  <text x="340" y="94" font-size="12.5" font-weight="700" fill="#b3261e" text-anchor="middle">★ temp_sensor.h 被修改</text>
+  <text x="340" y="109" font-size="10.5" fill="#8a929c" text-anchor="middle">一个具体传感器的头文件</text>
+
+  <!-- 分叉 -->
+  <path d="M 340 118 C 340 140 235 138 212 158" stroke="#e57373" stroke-width="1.5" fill="none" marker-end="url(#ar3)"/>
+  <path d="M 340 118 C 340 140 445 138 468 158" stroke="#e57373" stroke-width="1.5" fill="none" marker-end="url(#ar3)"/>
+  <text x="212" y="139" font-size="10.5" font-weight="700" fill="#8a929c" text-anchor="middle">新世界</text>
+  <text x="468" y="139" font-size="10.5" font-weight="700" fill="#8a929c" text-anchor="middle">旧世界</text>
+
+  <!-- 左：工厂 TU -->
+  <rect x="98" y="162" width="228" height="54" rx="6" fill="#ffffff" stroke="#e57373" stroke-width="1.6"/>
+  <text x="212" y="183" font-size="12" font-weight="700" fill="#1f2937" text-anchor="middle">sensor_factory.cpp</text>
+  <text x="212" y="199" font-size="10.5" fill="#b3261e" text-anchor="middle">唯一耦合点 · 重编（该挡的）</text>
+
+  <!-- 右：业务 TU -->
+  <rect x="354" y="162" width="228" height="54" rx="6" fill="#ffffff" stroke="#e57373" stroke-width="1.6"/>
+  <text x="468" y="183" font-size="12" font-weight="700" fill="#1f2937" text-anchor="middle">business_old.cpp</text>
+  <text x="468" y="199" font-size="10.5" fill="#b3261e" text-anchor="middle">业务代码 · 也重编 ✗</text>
+
+  <!-- 左：传播继续到业务 -->
+  <path d="M 212 218 L 212 252" stroke="#e57373" stroke-width="1.5" marker-end="url(#ar3)"/>
+  <text x="222" y="240" font-size="10" fill="#b3261e">include 链上下一个</text>
+
+  <!-- 左：业务 TU（未重编） -->
+  <rect x="98" y="256" width="228" height="52" rx="6" fill="#e8f5e9" stroke="#66bb6a" stroke-width="1.6"/>
+  <text x="212" y="277" font-size="12" font-weight="700" fill="#1b5e20" text-anchor="middle">business.cpp</text>
+  <text x="212" y="293" font-size="10.5" fill="#2e7d32" text-anchor="middle">依赖表里没有具体头 · 重编 0 次</text>
+  <text x="212" y="326" font-size="10" fill="#2e7d32" text-anchor="middle">↑ 中间那层把改动挡在了业务之外</text>
+
+  <!-- 右：业务 TU 直接暴露 -->
+  <path d="M 468 218 L 468 236" stroke="#e57373" stroke-width="1.5"/>
+  <text x="468" y="252" font-size="10" fill="#b3261e" text-anchor="middle">没有中间层可挡</text>
+  <text x="468" y="272" font-size="11" fill="#b3261e" text-anchor="middle">业务 TU 就在改动路径上</text>
+
+  <!-- 结论 -->
+  <rect x="24" y="344" width="632" height="80" rx="8" fill="#f7f9fc" stroke="#dbe3ee"/>
+  <text x="40" y="366" font-size="11.5" font-weight="700" fill="#1f2937">同一个扰动，重编范围差一层</text>
+  <text x="40" y="386" font-size="11.5" fill="#1f2937">新世界：temp_sensor.o + sensor_factory.o 重建，业务侧 0 次。</text>
+  <text x="40" y="404" font-size="11.5" fill="#1f2937">旧世界：business_old.o 也在重建列表里 —— 业务代码被一个传感器头拖下水。</text>
+  <text x="40" y="419" font-size="10.5" fill="#8a929c">实测命令：touch temp_sensor.h &amp;&amp; make （见 code/03_simple_factory/multi_tu/run.sh）</text>
+</svg>

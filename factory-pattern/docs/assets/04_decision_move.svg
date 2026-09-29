@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 404" width="680" height="404" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect width="680" height="404" fill="#ffffff"/>
+
+  <text x="24" y="30" font-size="16" font-weight="700" fill="#1f2937">决策搬迁：从函数体搬到装配点</text>
+  <text x="24" y="50" font-size="12" fill="#5b6472">新产品来了，两边的动作长得完全不像：一边要在已有代码里插一行，一边只是再加一个框。</text>
+
+  <!-- ============ 左：简单工厂 ============ -->
+  <text x="36" y="74" font-size="12" font-weight="700" fill="#1f2937">简单工厂 · 决策在函数体内</text>
+
+  <rect x="36" y="86" width="284" height="152" rx="6" fill="#f8fafc" stroke="#dfe4ea"/>
+  <text x="48" y="108" font-size="11" fill="#5b6472" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">create_sensor(type) {</text>
+  <text x="48" y="130" font-size="11" fill="#5b6472" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">  if "temp"     -&gt; TempSensor</text>
+  <text x="48" y="152" font-size="11" fill="#5b6472" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">  if "pressure" -&gt; PressureSensor</text>
+
+  <rect x="42" y="162" width="272" height="20" rx="3" fill="#fdecea" stroke="#e57373" stroke-dasharray="4 3"/>
+  <text x="48" y="176" font-size="11" fill="#b3261e" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">  if "humidity" -&gt; Humidity...</text>
+  <text x="296" y="176" font-size="10" font-weight="700" fill="#b3261e" text-anchor="end">插入</text>
+
+  <text x="48" y="196" font-size="11" fill="#5b6472" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">  throw ...</text>
+  <text x="48" y="218" font-size="11" fill="#5b6472" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">}</text>
+
+  <text x="36" y="260" font-size="11" fill="#b3261e">改一个已有函数体 &#8594; 伤 A/B/C 全中，须全量回归</text>
+
+  <!-- ============ 右：工厂方法 ============ -->
+  <text x="360" y="74" font-size="12" font-weight="700" fill="#1f2937">工厂方法 · 决策在装配点</text>
+
+  <rect x="336" y="86" width="320" height="152" rx="6" fill="#f8fafc" stroke="#dfe4ea"/>
+
+  <rect x="400" y="98" width="192" height="28" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="496" y="116" font-size="11" fill="#1f2937" text-anchor="middle">SensorFactory::create()</text>
+
+  <rect x="348" y="134" width="148" height="28" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="422" y="152" font-size="10.5" fill="#1f2937" text-anchor="middle">TempFactory</text>
+  <rect x="504" y="134" width="148" height="28" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="578" y="152" font-size="10.5" fill="#1f2937" text-anchor="middle">PressureFactory</text>
+
+  <rect x="400" y="170" width="192" height="28" rx="4" fill="#e8f5e9" stroke="#66bb6a" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="496" y="188" font-size="11" fill="#1b5e20" text-anchor="middle">HumidityFactory</text>
+  <text x="496" y="212" font-size="10" fill="#2e7d32" text-anchor="middle">新文件 · 纯加</text>
+  <text x="496" y="230" font-size="10" fill="#2e7d32" text-anchor="middle">装配点 push_back 一行（也是新代码）</text>
+
+  <text x="336" y="260" font-size="11" fill="#2e7d32">旧文件字节未动 &#8594; 零回归、零合并冲突</text>
+
+  <!-- ============ 结论 ============ -->
+  <rect x="24" y="276" width="632" height="104" rx="8" fill="#f7f9fc" stroke="#dbe3ee"/>
+  <text x="40" y="298" font-size="11.5" font-weight="700" fill="#1f2937">搬的是「选哪个产品」这件事的位置本身</text>
+  <text x="40" y="318" font-size="11.5" fill="#1f2937">简单工厂把它写在函数体的 if 链里；工厂方法把它挪到装配点上——由「选哪个工厂对象」来表达。</text>
+  <text x="40" y="338" font-size="11.5" fill="#1f2937">代价是类数量翻倍（N 个产品 = N 个产品类 + N 个工厂类），所以只在判据 1 成立时才值当。</text>
+  <text x="40" y="362" font-size="10.5" fill="#8a929c">实测对照：code/04_factory_method/factory_method.cpp（新增 HumiditySensor = 纯加不改）</text>
+</svg>
