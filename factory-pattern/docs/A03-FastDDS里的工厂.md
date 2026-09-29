@@ -1,10 +1,10 @@
 # A03 · Fast-DDS 里的工厂（v3.6.2 实读）
 
 > 上一节 A02 是"满世界挖经典实现"——LLVM、protobuf、boost、folly。
-> 但手边的 **Fast-DDS** 源码副本是同题的工业级答案库，而且是一个**系统内部的全套工厂设计**：
+> 而 **Fast-DDS** 源码是同题的工业级答案库，而且是一个**系统内部的全套工厂设计**：
 > 单例工厂、抽象工厂、注册表、所有权工厂、C++98 遗留形态，全都齐了。
 >
-> 本节所有行号与数据实测于本地 Fast-DDS 源码副本（`v3.6.2-17-g2ce7fe897`，upstream 为 `eProsima/Fast-DDS`），
+> 本节所有行号与数据实测于 Fast-DDS 源码（`v3.6.2-17-g2ce7fe897`，upstream 为 `eProsima/Fast-DDS`），
 > 代码见 `code/A03_fastdds/`。
 
 ---
@@ -15,7 +15,7 @@
 |---|---|
 | Fast-DDS 里有工厂模式吗？ | 有，而且**是 DDS 规范的强制形态**——`create_participant` / `create_datawriter` 就是工厂方法，写 DDS 程序的人每天都在用 |
 | 和 A02 那些库比，有什么特别的？ | 它把「**对象只能由工厂造、只能由工厂毁**」这条纪律做到了**语言机制级别**（protected 构造/析构 + friend） |
-| 对本地 RPC 分支有什么直接价值？ | 3 处实测缺陷，直接决定补实现时会撞什么墙 —— §6 |
+| 对补 RPC 实现有什么直接价值？ | 3 处实测缺陷，直接决定补实现时会撞什么墙 —— §6 |
 
 ---
 
@@ -305,7 +305,7 @@ IPersistenceService* PersistenceFactory::create_persistence_service(
 
 ---
 
-## 6. RPC 侧：本地分支上的工厂（本节重点）
+## 6. RPC 侧：被抽空的工厂（本节重点）
 
 ### 6.1 先说一个事实：RPC 实现是**官方抽走的**
 
@@ -318,7 +318,7 @@ commit  e516400ff230fc51fad569b0ed209b1464467cb4
 标题     RPC refactor (#6308)
 ```
 
-**这是 eProsima 官方的 PR #6308，不是本地分支的改动。** 也就是说：v3.6.2 发布时，官方主动把 RPC 实现抽掉了，只留接口壳。
+**这是 eProsima 官方的 PR #6308。** 也就是说：v3.6.2 发布时，官方主动把 RPC 实现抽掉了，只留接口壳。
 
 ### 6.2 `DomainParticipantImpl` 上那 13 个空壳
 
@@ -340,7 +340,7 @@ commit  e516400ff230fc51fad569b0ed209b1464467cb4
 | 12 | `create_service_replier`（2 参） | Replier | 工厂（转发到 11） |
 | 13 | `delete_service_replier` | Replier | 销毁 |
 
-**复核结论**：本地工作清单的盘点是准的——13 个函数体，其中 Requester/Replier 的工厂与销毁正好 6 个（#8–13），10 处打日志、3 个三参重载不打日志。
+**复核结论**：逐条盘点——13 个函数体，其中 Requester/Replier 的工厂与销毁正好 6 个（#8–13），10 处打日志、3 个三参重载不打日志。
 
 **结构上这是一个抽象工厂**：`Requester` / `Replier` 两个产品类型，族 = 服务实例。而 `find_service_type` / `register_service_type` 是**注册表侧**（登记类型，不造对象）——和 TypeObjectRegistry 同类。
 
@@ -387,9 +387,11 @@ protected:
 
 **当前为什么没炸**：`delete_service` 的函数体里根本没有 `delete` 语句，只有一句日志。**一旦补实现，隐藏问题立刻变成现实问题。**
 
-#### 缺陷 2：本地分支 `rpc_transport_ifaces.hpp` 的「protected 析构下沉到实现类」是无效的
+#### 缺陷 2：`rpc_transport_ifaces.hpp` 的「protected 析构下沉到实现类」是无效的
 
-本地分支在同一文件里写了一条纪律（L65）：
+> 注：该文件不在 v3.6.2 上游——上游 `include/fastdds/dds/rpc/` 只有 8 个接口头文件，没有 `impl/` 层。它属于 v3.6.2 之后的接口层代码，行号按当前工作树标注。
+
+该文件里写了一条纪律（L65）：
 
 ```cpp
 // 工厂（protected 析构语义下沉到实现类；service_name 构造绑定 → 回调零歧义）
@@ -422,7 +424,7 @@ RequesterTransport* create_requester_transport(...);   // 造出来
 ReplierTransport*   create_replier_transport(...);     // 没有 delete_*！
 ```
 
-对照同一仓库的做法：`IContentFilterFactory` 是 `create_content_filter` + `delete_content_filter` **成对**；`DynamicDataFactory` 是 `create_data` + `delete_data` **成对**。**本地分支的 transport 工厂缺销毁侧。** 要么补配对，要么改成 `unique_ptr` 返回（构造/析构都 public 时唯一省心的方案）。
+对照同一仓库的做法：`IContentFilterFactory` 是 `create_content_filter` + `delete_content_filter` **成对**；`DynamicDataFactory` 是 `create_data` + `delete_data` **成对**。**该接口层的 transport 工厂缺销毁侧。** 要么补配对，要么改成 `unique_ptr` 返回（构造/析构都 public 时唯一省心的方案）。
 
 #### 缺陷 3：真去 `delete` 还需要 `friend` 授权
 
@@ -512,4 +514,4 @@ g++ -std=c++17 -fsyntax-only 04_no_friend_rejected.cpp
 | RPC 析构策略 | `include/fastdds/dds/rpc/RPCEntity.hpp:54`、`Service.hpp:56` |
 | RPC 13 个空壳 | `src/cpp/fastdds/domain/DomainParticipantImpl.cpp:1978-2094` |
 | 空壳引入 commit | `e516400ff`「RPC refactor (#6308)」2026-02-24 |
-| 本地分支新增的 transport 工厂 | `include/fastdds/dds/rpc/impl/rpc_transport_ifaces.hpp:29,68,73` |
+| 接口层 transport 工厂（非 v3.6.2 上游） | `include/fastdds/dds/rpc/impl/rpc_transport_ifaces.hpp:29,68,73` |
