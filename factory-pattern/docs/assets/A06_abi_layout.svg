@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 436" width="680" height="436" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect width="680" height="436" fill="#ffffff"/>
+
+  <text x="24" y="30" font-size="16" font-weight="700" fill="#1f2937">同一份 PluginDesc，两种布局 —— 错位 8 字节就够了</text>
+  <text x="24" y="50" font-size="12" fill="#5b6472">宿主按左边读，插件返回的是右边。两边 version 都写着 3，谁都没发现自己错了。</text>
+
+  <!-- 面板标题 -->
+  <text x="26" y="82" font-size="12.5" font-weight="700" fill="#1f4e79">宿主侧 sizeof = 32</text>
+  <text x="358" y="82" font-size="12.5" font-weight="700" fill="#7a3e00">插件侧 sizeof = 40</text>
+
+  <!-- ============ 宿主面板 ============ -->
+  <!-- 0x00 -->
+  <text x="68" y="132" font-size="11" fill="#7a828e" text-anchor="end">0x00</text>
+  <rect x="74" y="110" width="128" height="40" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="138" y="135" font-size="11.5" fill="#1f2937" text-anchor="middle">abi_version = 3</text>
+  <rect x="206" y="110" width="124" height="40" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="268" y="135" font-size="11.5" fill="#1f2937" text-anchor="middle">struct_size = 32</text>
+
+  <!-- 0x08 -->
+  <text x="68" y="182" font-size="11" fill="#7a828e" text-anchor="end">0x08</text>
+  <rect x="74" y="160" width="256" height="40" rx="4" fill="#e8f0fe" stroke="#c7d7f5"/>
+  <text x="90" y="185" font-size="11.5" fill="#1f2937">name</text>
+  <text x="316" y="185" font-size="11" fill="#5b6472" text-anchor="end">指针 8B</text>
+
+  <!-- 0x10 危险 -->
+  <text x="68" y="232" font-size="11" fill="#b3261e" text-anchor="end">0x10</text>
+  <rect x="74" y="210" width="256" height="40" rx="4" fill="#fde8e8" stroke="#e57373" stroke-width="1.5"/>
+  <text x="90" y="235" font-size="11.5" font-weight="700" fill="#b3261e">read</text>
+  <text x="316" y="235" font-size="11" fill="#b3261e" text-anchor="end">函数指针 8B</text>
+
+  <!-- 0x18 -->
+  <text x="68" y="282" font-size="11" fill="#7a828e" text-anchor="end">0x18</text>
+  <rect x="74" y="260" width="256" height="40" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="90" y="285" font-size="11.5" fill="#1f2937">self</text>
+  <text x="316" y="285" font-size="11" fill="#5b6472" text-anchor="end">指针 8B</text>
+
+  <!-- ============ 插件面板 ============ -->
+  <!-- 0x00 -->
+  <text x="400" y="132" font-size="11" fill="#7a828e" text-anchor="end">0x00</text>
+  <rect x="406" y="110" width="128" height="40" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="470" y="135" font-size="11.5" fill="#1f2937" text-anchor="middle">abi_version = 3</text>
+  <rect x="538" y="110" width="124" height="40" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="600" y="135" font-size="11.5" fill="#1f2937" text-anchor="middle">struct_size = 40</text>
+
+  <!-- 0x08 -->
+  <text x="400" y="182" font-size="11" fill="#7a828e" text-anchor="end">0x08</text>
+  <rect x="406" y="160" width="256" height="40" rx="4" fill="#e8f0fe" stroke="#c7d7f5"/>
+  <text x="422" y="185" font-size="11.5" fill="#1f2937">name</text>
+  <text x="648" y="185" font-size="11" fill="#5b6472" text-anchor="end">指针 8B</text>
+
+  <!-- 0x10 危险 -->
+  <text x="400" y="232" font-size="11" fill="#b3261e" text-anchor="end">0x10</text>
+  <rect x="406" y="210" width="128" height="40" rx="4" fill="#fde8e8" stroke="#e57373" stroke-width="1.5"/>
+  <text x="470" y="235" font-size="11.5" font-weight="700" fill="#b3261e" text-anchor="middle">sample_rate_hz</text>
+  <rect x="538" y="210" width="124" height="40" rx="4" fill="#f6f7f9" stroke="#dfe4ea"/>
+  <text x="600" y="235" font-size="11" fill="#8a929c" text-anchor="middle">填充</text>
+
+  <!-- 0x18 -->
+  <text x="400" y="282" font-size="11" fill="#7a828e" text-anchor="end">0x18</text>
+  <rect x="406" y="260" width="256" height="40" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="422" y="285" font-size="11.5" fill="#1f2937">read</text>
+  <text x="648" y="285" font-size="11" fill="#5b6472" text-anchor="end">函数指针 8B</text>
+
+  <!-- 0x20 -->
+  <text x="400" y="332" font-size="11" fill="#7a828e" text-anchor="end">0x20</text>
+  <rect x="406" y="310" width="256" height="40" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="422" y="335" font-size="11.5" fill="#1f2937">self</text>
+  <text x="648" y="335" font-size="11" fill="#5b6472" text-anchor="end">指针 8B</text>
+
+  <!-- 错位连接 -->
+  <path d="M 330 230 L 368 230" stroke="#b3261e" stroke-width="1.6" stroke-dasharray="4 3"/>
+  <path d="M 406 230 L 368 230" stroke="#b3261e" stroke-width="1.6" stroke-dasharray="4 3"/>
+  <circle cx="368" cy="230" r="9" fill="#b3261e"/>
+  <text x="368" y="234" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle">✗</text>
+
+  <!-- 底部结论 -->
+  <rect x="24" y="368" width="632" height="52" rx="6" fill="#fde8e8" stroke="#e57373"/>
+  <text x="40" y="389" font-size="12" fill="#7f1d1d">宿主在 0x10 处读到的「read」，其实是插件的 <tspan font-weight="700">sample_rate_hz = 100</tspan>（十六进制 0x64）。</text>
+  <text x="40" y="409" font-size="12" fill="#7f1d1d">于是它去调用地址 100 —— 实测 SIGSEGV，退出码 139。校验 struct_size 就能在调用前拦住。</text>
+</svg>
