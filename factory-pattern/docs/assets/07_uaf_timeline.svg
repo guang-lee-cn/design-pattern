@@ -1,0 +1,36 @@
+<svg viewBox="0 0 680 232" role="img" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;font-family:var(--font-sans)">
+<title>缓存工厂的悬垂指针时序</title>
+<desc>工厂创建对象并把地址写进缓存；调用方删除对象后缓存仍指向该地址；再次获取时读到已释放内存，被 AddressSanitizer 捕获。</desc>
+
+<text x="16" y="20" font-size="13" font-weight="500" fill="#2C2C2A">t1　工厂创建并缓存</text>
+<rect x="16" y="36" width="200" height="80" rx="6" fill="#E6F1FB" stroke="#185FA5" stroke-width="1"/>
+<text x="32" y="60" font-size="13" fill="#0C447C">Sensor 对象</text>
+<text x="32" y="82" font-size="12" fill="#185FA5">name = "temp"</text>
+<text x="32" y="104" font-size="12" fill="#185FA5">状态：存活</text>
+<text x="16" y="136" font-size="12" fill="#5F5E5A">缓存表 temp → 该地址</text>
+
+<path d="M222 76 L236 76" stroke="#B4B2A9" stroke-width="1"/>
+<path d="M238 76 l-6 -3 v6 z" fill="#B4B2A9"/>
+
+<text x="240" y="20" font-size="13" font-weight="500" fill="#2C2C2A">t2　调用方 delete</text>
+<rect x="240" y="36" width="200" height="80" rx="6" fill="#FCEBEB" stroke="#A32D2D" stroke-width="1" stroke-dasharray="4 3"/>
+<text x="256" y="60" font-size="13" fill="#791F1F">该内存已释放</text>
+<text x="256" y="82" font-size="12" fill="#A32D2D">name = 垃圾值</text>
+<text x="256" y="104" font-size="12" fill="#A32D2D">ASan 标为已中毒</text>
+<text x="240" y="136" font-size="12" fill="#5F5E5A">缓存表仍指向这里</text>
+<text x="240" y="154" font-size="12" font-weight="500" fill="#791F1F">→ 悬垂指针</text>
+
+<path d="M446 76 L460 76" stroke="#B4B2A9" stroke-width="1"/>
+<path d="M462 76 l-6 -3 v6 z" fill="#B4B2A9"/>
+
+<text x="464" y="20" font-size="13" font-weight="500" fill="#2C2C2A">t3　再次 get("temp")</text>
+<rect x="464" y="36" width="200" height="80" rx="6" fill="#FCEBEB" stroke="#A32D2D" stroke-width="1" stroke-dasharray="4 3"/>
+<text x="480" y="60" font-size="13" fill="#791F1F">返回同一地址</text>
+<text x="480" y="82" font-size="12" fill="#A32D2D">read() 访问 name</text>
+<text x="480" y="104" font-size="12" fill="#A32D2D">→ 读已释放内存</text>
+<text x="464" y="136" font-size="12" fill="#5F5E5A">调用方毫无察觉</text>
+
+<rect x="16" y="174" width="648" height="46" rx="6" fill="#FCEBEB" stroke="#A32D2D" stroke-width="0.5"/>
+<text x="32" y="195" font-size="12" font-weight="500" fill="#791F1F">AddressSanitizer：heap-use-after-free　（退出码 1）</text>
+<text x="32" y="212" font-size="12" fill="#A32D2D">READ of size 8 —— basic_string::size() ← Sensor::read() ← main</text>
+</svg>
