@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 464" width="680" height="464" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect width="680" height="464" fill="#ffffff"/>
+
+  <defs>
+    <marker id="a5r2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 8 4 L 0 8 z" fill="#e57373"/>
+    </marker>
+    <marker id="a5g2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 8 4 L 0 8 z" fill="#66bb6a"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="30" font-size="16" font-weight="700" fill="#1f2937">两个正交的扩展方向，代价天差地别</text>
+  <text x="24" y="50" font-size="12" fill="#5b6472">同一个"加"，加在不同方向：加族只写新类，加产品类型要改遍所有族。</text>
+
+  <!-- 列表头 -->
+  <rect x="24" y="74" width="96" height="30" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="72" y="93" font-size="10.5" fill="#8a929c" text-anchor="middle">工厂 × 方法</text>
+
+  <rect x="120" y="74" width="96" height="30" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="168" y="93" font-size="11.5" fill="#374151" text-anchor="middle">UART</text>
+  <rect x="216" y="74" width="96" height="30" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="264" y="93" font-size="11.5" fill="#374151" text-anchor="middle">GPIO</text>
+  <rect x="312" y="74" width="96" height="30" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="360" y="93" font-size="11.5" fill="#374151" text-anchor="middle">Timer</text>
+  <rect x="408" y="74" width="96" height="30" rx="5" fill="#fdecea" stroke="#e57373" stroke-width="1.5"/>
+  <text x="456" y="93" font-size="11.5" font-weight="700" fill="#b3261e" text-anchor="middle">SPI</text>
+
+  <!-- 行 1 -->
+  <rect x="24" y="112" width="96" height="30" rx="5" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="72" y="131" font-size="11" fill="#374151" text-anchor="middle">FactoryA</text>
+  <rect x="120" y="112" width="96" height="30" rx="4" fill="#e8f5e9" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="168" y="131" font-size="10.5" fill="#2e7d32" text-anchor="middle">已实现</text>
+  <rect x="216" y="112" width="96" height="30" rx="4" fill="#e8f5e9" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="264" y="131" font-size="10.5" fill="#2e7d32" text-anchor="middle">已实现</text>
+  <rect x="312" y="112" width="96" height="30" rx="4" fill="#e8f5e9" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="360" y="131" font-size="10.5" fill="#2e7d32" text-anchor="middle">已实现</text>
+  <rect x="408" y="112" width="96" height="30" rx="4" fill="#fdecea" stroke="#e57373" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <text x="456" y="131" font-size="10.5" font-weight="700" fill="#b3261e" text-anchor="middle">需补</text>
+
+  <!-- 行 2 -->
+  <rect x="24" y="148" width="96" height="30" rx="5" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="72" y="167" font-size="11" fill="#374151" text-anchor="middle">FactoryB</text>
+  <rect x="120" y="148" width="96" height="30" rx="4" fill="#e8f5e9" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="168" y="167" font-size="10.5" fill="#2e7d32" text-anchor="middle">已实现</text>
+  <rect x="216" y="148" width="96" height="30" rx="4" fill="#e8f5e9" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="264" y="167" font-size="10.5" fill="#2e7d32" text-anchor="middle">已实现</text>
+  <rect x="312" y="148" width="96" height="30" rx="4" fill="#e8f5e9" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="360" y="167" font-size="10.5" fill="#2e7d32" text-anchor="middle">已实现</text>
+  <rect x="408" y="148" width="96" height="30" rx="4" fill="#fdecea" stroke="#e57373" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <text x="456" y="167" font-size="10.5" font-weight="700" fill="#b3261e" text-anchor="middle">需补</text>
+
+  <!-- 行 3 -->
+  <rect x="24" y="184" width="96" height="30" rx="5" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="72" y="203" font-size="11" fill="#374151" text-anchor="middle">FactoryC</text>
+  <rect x="120" y="184" width="96" height="30" rx="4" fill="#e8f5e9" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="168" y="203" font-size="10.5" fill="#2e7d32" text-anchor="middle">已实现</text>
+  <rect x="216" y="184" width="96" height="30" rx="4" fill="#e8f5e9" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="264" y="203" font-size="10.5" fill="#2e7d32" text-anchor="middle">已实现</text>
+  <rect x="312" y="184" width="96" height="30" rx="4" fill="#e8f5e9" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="360" y="203" font-size="10.5" fill="#2e7d32" text-anchor="middle">已实现</text>
+  <rect x="408" y="184" width="96" height="30" rx="4" fill="#fdecea" stroke="#e57373" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <text x="456" y="203" font-size="10.5" font-weight="700" fill="#b3261e" text-anchor="middle">需补</text>
+
+  <!-- 行 4 -->
+  <rect x="24" y="220" width="96" height="30" rx="5" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="72" y="239" font-size="11" fill="#374151" text-anchor="middle">FactoryD</text>
+  <rect x="120" y="220" width="96" height="30" rx="4" fill="#e8f5e9" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="168" y="239" font-size="10.5" fill="#2e7d32" text-anchor="middle">已实现</text>
+  <rect x="216" y="220" width="96" height="30" rx="4" fill="#e8f5e9" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="264" y="239" font-size="10.5" fill="#2e7d32" text-anchor="middle">已实现</text>
+  <rect x="312" y="220" width="96" height="30" rx="4" fill="#e8f5e9" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="360" y="239" font-size="10.5" fill="#2e7d32" text-anchor="middle">已实现</text>
+  <rect x="408" y="220" width="96" height="30" rx="4" fill="#fdecea" stroke="#e57373" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <text x="456" y="239" font-size="10.5" font-weight="700" fill="#b3261e" text-anchor="middle">需补</text>
+
+  <!-- 新增族一行 -->
+  <rect x="24" y="262" width="480" height="30" rx="5" fill="#e8f5e9" stroke="#66bb6a" stroke-width="1.4"/>
+  <text x="72" y="281" font-size="11" font-weight="700" fill="#1b5e20" text-anchor="middle">FactoryE</text>
+  <text x="132" y="281" font-size="10.5" fill="#2e7d32">新增族 —— 写一个新类即可，已有文件一行不动</text>
+
+  <!-- 方向标注：加产品类型 -->
+  <path d="M 506 89 L 514 89" stroke="#e57373" stroke-width="1.5" marker-end="url(#a5r2)"/>
+  <text x="520" y="88" font-size="11" font-weight="700" fill="#b3261e">加产品类型</text>
+  <text x="520" y="106" font-size="10.5" fill="#b3261e">+1 列（SPI）</text>
+  <text x="520" y="126" font-size="10.5" fill="#5b6472">4 个具体工厂</text>
+  <text x="520" y="142" font-size="10.5" fill="#5b6472">各补 1 个方法</text>
+  <text x="520" y="162" font-size="10" fill="#8a929c">族越多越贵</text>
+
+  <!-- 方向标注：加族 -->
+  <path d="M 506 277 L 514 277" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#a5g2)"/>
+  <text x="520" y="276" font-size="11" font-weight="700" fill="#1b5e20">加族</text>
+  <text x="520" y="294" font-size="10.5" fill="#2e7d32">+1 行</text>
+  <text x="520" y="314" font-size="10.5" fill="#5b6472">旧类 0 处改动</text>
+
+  <!-- 结论 -->
+  <rect x="24" y="328" width="632" height="112" rx="8" fill="#f7f9fc" stroke="#dbe3ee"/>
+  <text x="40" y="350" font-size="12.5" font-weight="700" fill="#1f2937">它对"加族"开放，对"加产品类型"封闭 —— 两个方向不是一回事</text>
+  <text x="40" y="372" font-size="11.5" fill="#1f2937">加族：+1 个新类，0 处旧代码改动 —— 满足 OCP，这是 HAL/BSP 层真正在做的事。</text>
+  <text x="40" y="390" font-size="11.5" fill="#1f2937">加产品类型：N 个具体工厂全要改 —— 破坏 OCP，代价与族数成正比。</text>
+  <text x="40" y="412" font-size="10.5" fill="#8a929c">实测（code/05_abstract_factory/measure_extend_cost.py，以编译器 error: 行数为指标）：</text>
+  <text x="40" y="428" font-size="10.5" fill="#8a929c">族数 2 / 4 / 8 / 16 → 增量 2 / 4 / 8 / 16，严格线性等于族数。</text>
+</svg>

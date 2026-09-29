@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 492" width="680" height="492" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect width="680" height="492" fill="#ffffff"/>
+
+  <defs>
+    <marker id="a5r" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 8 4 L 0 8 z" fill="#e57373"/>
+    </marker>
+    <marker id="a5g" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 8 4 L 0 8 z" fill="#66bb6a"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="30" font-size="16" font-weight="700" fill="#1f2937">抽象工厂买到的是什么：选择点从 3 个收敛到 1 个</text>
+  <text x="24" y="50" font-size="12" fill="#5b6472">同一批产品（UART / GPIO / Timer）、同样 2 个平台。区别只在"选平台"这件事要说几遍。</text>
+
+  <!-- ============ 左：每类产品一个独立工厂 ============ -->
+  <rect x="24" y="72" width="310" height="272" rx="8" fill="#fdfefe" stroke="#e2e8f0" stroke-width="1.2"/>
+  <text x="40" y="94" font-size="12.5" font-weight="700" fill="#b3261e">每类产品一个独立工厂</text>
+  <text x="40" y="110" font-size="10.5" fill="#8a929c">N 个工厂 ＝ N 个选择点</text>
+
+  <rect x="40" y="122" width="278" height="30" rx="5" fill="#ffffff" stroke="#e57373" stroke-width="1.3"/>
+  <text x="54" y="141" font-size="11.5" fill="#1f2937">create_uart(platform)</text>
+  <text x="306" y="141" font-size="10" fill="#b3261e" text-anchor="end">选 A 还是 B</text>
+
+  <rect x="40" y="158" width="278" height="30" rx="5" fill="#ffffff" stroke="#e57373" stroke-width="1.3"/>
+  <text x="54" y="177" font-size="11.5" fill="#1f2937">create_gpio(platform)</text>
+  <text x="306" y="177" font-size="10" fill="#b3261e" text-anchor="end">选 A 还是 B</text>
+
+  <rect x="40" y="194" width="278" height="30" rx="5" fill="#ffffff" stroke="#e57373" stroke-width="1.3"/>
+  <text x="54" y="213" font-size="11.5" fill="#1f2937">create_timer(platform)</text>
+  <text x="306" y="213" font-size="10" fill="#b3261e" text-anchor="end">选 A 还是 B</text>
+
+  <text x="40" y="248" font-size="11.5" font-weight="700" fill="#b3261e">选择点 × 3</text>
+  <text x="40" y="272" font-size="11" fill="#5b6472">组合空间 = 2³ = 8</text>
+
+  <rect x="40" y="282" width="28" height="24" rx="4" fill="#e8f5e9" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="54" y="298" font-size="9.5" fill="#1b5e20" text-anchor="middle">AAA</text>
+  <rect x="70" y="282" width="28" height="24" rx="4" fill="#fdecea" stroke="#e57373" stroke-width="1.2"/>
+  <text x="84" y="298" font-size="9.5" fill="#b3261e" text-anchor="middle">AAB</text>
+  <rect x="100" y="282" width="28" height="24" rx="4" fill="#fdecea" stroke="#e57373" stroke-width="1.2"/>
+  <text x="114" y="298" font-size="9.5" fill="#b3261e" text-anchor="middle">ABA</text>
+  <rect x="130" y="282" width="28" height="24" rx="4" fill="#fdecea" stroke="#e57373" stroke-width="1.2"/>
+  <text x="144" y="298" font-size="9.5" fill="#b3261e" text-anchor="middle">ABB</text>
+  <rect x="160" y="282" width="28" height="24" rx="4" fill="#fdecea" stroke="#e57373" stroke-width="1.2"/>
+  <text x="174" y="298" font-size="9.5" fill="#b3261e" text-anchor="middle">BAA</text>
+  <rect x="190" y="282" width="28" height="24" rx="4" fill="#fdecea" stroke="#e57373" stroke-width="1.2"/>
+  <text x="204" y="298" font-size="9.5" fill="#b3261e" text-anchor="middle">BAB</text>
+  <rect x="220" y="282" width="28" height="24" rx="4" fill="#fdecea" stroke="#e57373" stroke-width="1.2"/>
+  <text x="234" y="298" font-size="9.5" fill="#b3261e" text-anchor="middle">BBA</text>
+  <rect x="250" y="282" width="28" height="24" rx="4" fill="#e8f5e9" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="264" y="298" font-size="9.5" fill="#1b5e20" text-anchor="middle">BBB</text>
+
+  <text x="40" y="326" font-size="10.5" fill="#b3261e">错组合 6 种 —— 编译期全部合法，运行期才炸</text>
+
+  <!-- ============ 右：族工厂 ============ -->
+  <rect x="346" y="72" width="310" height="272" rx="8" fill="#fdfefe" stroke="#e2e8f0" stroke-width="1.2"/>
+  <text x="362" y="94" font-size="12.5" font-weight="700" fill="#1b5e20">族工厂（抽象工厂）</text>
+  <text x="362" y="110" font-size="10.5" fill="#8a929c">1 个工厂 ＝ 1 个选择点</text>
+
+  <rect x="362" y="122" width="278" height="102" rx="5" fill="#ffffff" stroke="#66bb6a" stroke-width="1.3"/>
+  <text x="378" y="144" font-size="11.5" font-weight="700" fill="#1f2937">BspFactory</text>
+  <text x="378" y="166" font-size="11" fill="#374151">create_uart()</text>
+  <text x="378" y="185" font-size="11" fill="#374151">create_gpio()</text>
+  <text x="378" y="204" font-size="11" fill="#374151">create_timer()</text>
+  <text x="626" y="144" font-size="10" fill="#2e7d32" text-anchor="end">选 A 还是 B</text>
+
+  <text x="362" y="248" font-size="11.5" font-weight="700" fill="#1b5e20">选择点 × 1</text>
+  <text x="362" y="272" font-size="11" fill="#5b6472">组合空间 = 2¹ = 2</text>
+
+  <rect x="361" y="282" width="130" height="24" rx="4" fill="#e8f5e9" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="426" y="298" font-size="10" fill="#1b5e20" text-anchor="middle">全族 A</text>
+  <rect x="511" y="282" width="130" height="24" rx="4" fill="#e8f5e9" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="576" y="298" font-size="10" fill="#1b5e20" text-anchor="middle">全族 B</text>
+
+  <text x="362" y="326" font-size="10.5" fill="#2e7d32">错组合 0 种 —— 混搭在调用侧无法表达</text>
+
+  <!-- ============ 收敛箭头 ============ -->
+  <path d="M 336 218 L 344 218" stroke="#66bb6a" stroke-width="1.6" marker-end="url(#a5g)"/>
+
+  <!-- ============ 结论 ============ -->
+  <rect x="24" y="364" width="632" height="104" rx="8" fill="#f7f9fc" stroke="#dbe3ee"/>
+  <text x="40" y="386" font-size="12.5" font-weight="700" fill="#1f2937">选择点 3 → 1　·　组合空间 8 → 2　·　错组合 6 → 0</text>
+  <text x="40" y="408" font-size="11.5" fill="#1f2937">"选哪个平台"在 N 个地方各说一遍时，任何一处说了不一样的，就得到一个能编译、能启动、</text>
+  <text x="40" y="426" font-size="11.5" fill="#1f2937">运行期才炸的混搭 —— 编译器全程不拦。</text>
+  <text x="40" y="450" font-size="10.5" fill="#8a929c">实测：code/05_abstract_factory/bad_mix.cpp（混搭运行期抛错）· abstract_factory.cpp（族内 hw_id 一致）</text>
+</svg>
