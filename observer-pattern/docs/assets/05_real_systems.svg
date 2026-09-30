@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 592" width="680" height="592" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8b98a8"/>
+    </marker>
+  </defs>
+  <rect width="680" height="592" fill="#ffffff"/>
+
+  <text x="24" y="30" font-size="16" font-weight="700" fill="#1f2937">三个真实系统，同一把尺子</text>
+  <text x="24" y="50" font-size="11.5" fill="#5b6472">探针在 code/05_scenarios/ ，run_scenarios.sh 一次跑完。</text>
+  <text x="24" y="66" font-size="11.5" fill="#5b6472">刻度沿用第 3 / 4 节：名单放在哪 ⇒ 0 回调 / 1 观察者 / 2 事件总线 / 3 发布订阅。</text>
+
+  <!-- ============ 行 1：Qt ============ -->
+  <text x="24" y="102" font-size="12" font-weight="700" fill="#1f2937">Qt 5.15 —— 同一套 API，跨两格</text>
+
+  <rect x="24" y="144" width="84" height="38" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="66" y="168" font-size="11" fill="#1f2937" text-anchor="middle">Sensor</text>
+
+  <path d="M 108 163 H 132" stroke="#8b98a8" stroke-width="1.5" fill="none" marker-end="url(#arw)"/>
+  <text x="118" y="156" font-size="9.5" fill="#5b6472" text-anchor="middle">emit</text>
+
+  <rect x="138" y="144" width="124" height="38" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="200" y="161" font-size="11" fill="#1f2937" text-anchor="middle">连接表</text>
+  <text x="200" y="175" font-size="9.5" fill="#5b6472" text-anchor="middle">（sender 私有数据）</text>
+
+  <path d="M 262 154 H 297 V 135 H 319" stroke="#8b98a8" stroke-width="1.5" fill="none" marker-end="url(#arw)"/>
+  <rect x="325" y="118" width="96" height="34" rx="4" fill="#0c447c"/>
+  <text x="373" y="140" font-size="11" fill="#ffffff" text-anchor="middle">Display</text>
+
+  <path d="M 262 172 H 297 V 189 H 319" stroke="#8b98a8" stroke-width="1.5" fill="none" marker-end="url(#arw)"/>
+  <rect x="325" y="172" width="78" height="34" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="364" y="194" font-size="11" fill="#1f2937" text-anchor="middle">事件队列</text>
+  <path d="M 403 189 H 421" stroke="#8b98a8" stroke-width="1.5" fill="none" marker-end="url(#arw)"/>
+  <rect x="427" y="172" width="96" height="34" rx="4" fill="#7c3aed"/>
+  <text x="475" y="194" font-size="11" fill="#ffffff" text-anchor="middle">Display</text>
+
+  <rect x="24" y="218" width="10" height="10" rx="2" fill="#0c447c"/>
+  <text x="40" y="227" font-size="11" fill="#5b6472">Direct ⇒ <tspan fill="#0c447c" font-weight="700">刻度 2</tspan>：emit 返回前已送达</text>
+  <rect x="350" y="218" width="10" height="10" rx="2" fill="#7c3aed"/>
+  <text x="366" y="227" font-size="11" fill="#5b6472">Queued ⇒ <tspan fill="#7c3aed" font-weight="700">刻度 3</tspan>：跑事件循环时才送达</text>
+
+  <!-- ============ 行 2：内核通知链 ============ -->
+  <text x="24" y="266" font-size="12" font-weight="700" fill="#1f2937">内核通知链 —— include/linux/notifier.h</text>
+
+  <rect x="24" y="286" width="104" height="44" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="76" y="305" font-size="11" fill="#1f2937" text-anchor="middle">事件源</text>
+  <text x="76" y="320" font-size="9.5" fill="#5b6472" text-anchor="middle">panic / netdev</text>
+
+  <path d="M 128 308 H 150" stroke="#8b98a8" stroke-width="1.5" fill="none" marker-end="url(#arw)"/>
+  <rect x="156" y="286" width="154" height="44" rx="4" fill="#0c447c"/>
+  <text x="233" y="313" font-size="10.5" fill="#ffffff" text-anchor="middle">全局 notifier_head</text>
+
+  <path d="M 310 308 H 330" stroke="#8b98a8" stroke-width="1.5" fill="none" marker-end="url(#arw)"/>
+  <rect x="336" y="294" width="54" height="28" rx="4" fill="#c9d4e2"/>
+  <text x="363" y="313" font-size="10.5" fill="#1f2937" text-anchor="middle">nb1</text>
+  <path d="M 390 308 H 400" stroke="#8b98a8" stroke-width="1.5" fill="none" marker-end="url(#arw)"/>
+  <rect x="406" y="294" width="54" height="28" rx="4" fill="#c9d4e2"/>
+  <text x="433" y="313" font-size="10.5" fill="#1f2937" text-anchor="middle">nb2</text>
+  <path d="M 460 308 H 470" stroke="#8b98a8" stroke-width="1.5" fill="none" marker-end="url(#arw)"/>
+  <rect x="476" y="294" width="54" height="28" rx="4" fill="#c9d4e2"/>
+  <text x="503" y="313" font-size="10.5" fill="#1f2937" text-anchor="middle">nb3</text>
+
+  <text x="24" y="350" font-size="11" fill="#5b6472">同步遍历；任一节点返回 NOTIFY_STOP 即中止后续 —— 返回值有权力（责任链语义）。</text>
+
+  <!-- ============ 行 3：inotify ============ -->
+  <text x="24" y="398" font-size="12" font-weight="700" fill="#1f2937">inotify —— sys/inotify.h（跨进程，且无历史）</text>
+
+  <rect x="24" y="418" width="128" height="46" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="88" y="438" font-size="10.5" fill="#1f2937" text-anchor="middle">进程 A（发布方）</text>
+  <text x="88" y="454" font-size="9.5" fill="#5b6472" text-anchor="middle">write() 之后退出</text>
+
+  <path d="M 152 441 H 178" stroke="#8b98a8" stroke-width="1.5" fill="none" marker-end="url(#arw)"/>
+  <rect x="184" y="414" width="180" height="54" rx="4" fill="#7c3aed"/>
+  <text x="274" y="437" font-size="10.5" fill="#ffffff" text-anchor="middle">内核 watch 表 + 队列</text>
+  <text x="274" y="453" font-size="9.5" fill="#e9dcff" text-anchor="middle">max_queued_events = 16384</text>
+
+  <path d="M 364 441 H 390" stroke="#8b98a8" stroke-width="1.5" fill="none" marker-end="url(#arw)"/>
+  <rect x="396" y="418" width="128" height="46" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="460" y="438" font-size="10.5" fill="#1f2937" text-anchor="middle">进程 B（订阅方）</text>
+  <text x="460" y="454" font-size="9.5" fill="#5b6472" text-anchor="middle">read() 才拿到</text>
+
+  <text x="24" y="486" font-size="11" fill="#5b6472">发布方已不存在，事件仍在队列里 ⇒ <tspan fill="#7c3aed" font-weight="700">刻度 3</tspan>。</text>
+  <text x="24" y="504" font-size="11" fill="#5b6472">队列满则丢弃并通告 IN_Q_OVERFLOW；写之后再注册的 watcher 收不到任何事件。</text>
+
+  <!-- ============ 结论 ============ -->
+  <rect x="24" y="520" width="632" height="60" rx="6" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="40" y="544" font-size="12" fill="#1f2937">四份落点全在刻度 2 与 3 —— 刻度 0 / 1（回调、观察者）<tspan font-weight="700">一个都没有</tspan>。</text>
+  <text x="40" y="566" font-size="11" fill="#5b6472">不是巧合：这三个都是框架，必须让第三方在不改源码的前提下接入，那正是 0 和 1 做不到的事。</text>
+</svg>
