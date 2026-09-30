@@ -28,7 +28,7 @@ design-pattern/
 
 | 目录 | 分类 | 状态 |
 |---|---|---|
-| [`factory-pattern/`](factory-pattern/) | 创建型 | 正文 17 篇（主线 7 + 子专题 2 + 专题 6 + 检验 1）+ 13 个可运行场景 |
+| [`factory-pattern/`](factory-pattern/) | 创建型 | 正文 17 篇（主线 8 + 子专题 2 + 专题 6 + 检验 1）+ 13 个可运行场景 |
 
 ## 快速开始
 
