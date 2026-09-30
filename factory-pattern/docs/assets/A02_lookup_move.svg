@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 412" width="680" height="412" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect width="680" height="412" fill="#ffffff"/>
+
+  <text x="24" y="30" font-size="16" font-weight="700" fill="#1f2937">那次查找被挪到了注册期</text>
+  <text x="24" y="50" font-size="12" fill="#5b6472">同样是 N 次创建，一边查 N 次表，一边只查 1 次 —— 差别是橙块落在时间轴的哪一段。</text>
+
+  <!-- ================= 方案 A ================= -->
+  <text x="24" y="82" font-size="12.5" font-weight="700" fill="#7a3e00">注册表方案 · create() 里查表</text>
+
+  <text x="24" y="108" font-size="10.5" fill="#7a828e" text-anchor="start">注册期</text>
+  <rect x="104" y="92" width="152" height="34" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="180" y="114" font-size="11" fill="#1f2937" text-anchor="middle">插入 map</text>
+
+  <text x="24" y="152" font-size="10.5" fill="#7a828e">创建期</text>
+  <rect x="104" y="136" width="120" height="34" rx="4" fill="#fde8e8" stroke="#e57373"/>
+  <text x="164" y="158" font-size="11" font-weight="700" fill="#b3261e" text-anchor="middle">查 map</text>
+  <rect x="232" y="136" width="120" height="34" rx="4" fill="#fde8e8" stroke="#e57373"/>
+  <text x="292" y="158" font-size="11" font-weight="700" fill="#b3261e" text-anchor="middle">查 map</text>
+  <rect x="360" y="136" width="120" height="34" rx="4" fill="#fde8e8" stroke="#e57373"/>
+  <text x="420" y="158" font-size="11" font-weight="700" fill="#b3261e" text-anchor="middle">查 map</text>
+  <text x="552" y="158" font-size="11" fill="#8a929c" text-anchor="middle">…… 第 N 次</text>
+
+  <text x="104" y="186" font-size="10" fill="#8a929c">每次 create = 查表 + 调 std::function + new　→　查找次数 = 创建次数</text>
+
+  <!-- ================= 方案 B ================= -->
+  <text x="24" y="214" font-size="12.5" font-weight="700" fill="#1b5e20">protobuf MessageFactory · 查找在注册期</text>
+
+  <text x="24" y="240" font-size="10.5" fill="#7a828e">注册期</text>
+  <rect x="104" y="224" width="140" height="34" rx="4" fill="#fde8e8" stroke="#e57373"/>
+  <text x="174" y="246" font-size="11" font-weight="700" fill="#b3261e" text-anchor="middle">查 descriptor</text>
+  <rect x="252" y="224" width="152" height="34" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="328" y="246" font-size="11" fill="#1f2937" text-anchor="middle">建 prototype 表</text>
+
+  <text x="24" y="284" font-size="10.5" fill="#7a828e">创建期</text>
+  <rect x="104" y="268" width="152" height="34" rx="4" fill="#e8f5e9" stroke="#a5d6a7"/>
+  <text x="180" y="290" font-size="11" fill="#1b5e20" text-anchor="middle">prototype-&gt;New()</text>
+  <rect x="264" y="268" width="152" height="34" rx="4" fill="#e8f5e9" stroke="#a5d6a7"/>
+  <text x="340" y="290" font-size="11" fill="#1b5e20" text-anchor="middle">prototype-&gt;New()</text>
+  <rect x="424" y="268" width="152" height="34" rx="4" fill="#e8f5e9" stroke="#a5d6a7"/>
+  <text x="500" y="290" font-size="11" fill="#1b5e20" text-anchor="middle">prototype-&gt;New()</text>
+
+  <text x="104" y="318" font-size="10" fill="#8a929c">每次 create = 一次虚调用　→　查找次数 = 1，与创建多少次无关</text>
+
+  <!-- 结论 -->
+  <rect x="24" y="334" width="632" height="70" rx="6" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="40" y="356" font-size="11.5" fill="#1f2937">同一件事（按名字造对象），查找成本可以<tspan font-weight="700">从「每次创建」挪到「每次类型注册」</tspan>。</text>
+  <text x="40" y="376" font-size="11.5" fill="#5b6472">前提是产品集合在注册期就已确定 —— 这恰好是「按类型名造对象」这类场景的常态。</text>
+  <text x="40" y="395" font-size="11.5" fill="#5b6472">代价也写在契约里：这张表是单例、调用方不得 delete、且查找被声明为不修改共享数据。</text>
+</svg>

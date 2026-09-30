@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 340" width="680" height="340" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect width="680" height="340" fill="#ffffff"/>
+
+  <defs>
+    <marker id="a1g" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 8 4 L 0 8 z" fill="#a0aec0"/>
+    </marker>
+    <marker id="a1r" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 8 4 L 0 8 z" fill="#e57373"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="30" font-size="16" font-weight="700" fill="#1f2937">裸 new 和智能指针之间，有一个窗口</text>
+  <text x="24" y="50" font-size="12" fill="#5b6472">窗口里发生任何一次 throw 或 return，这块内存就再没有主人 —— 而窗口是设计出来的，不是编译器检测出来的。</text>
+
+  <!-- 拍 1 -->
+  <rect x="24" y="76" width="150" height="66" rx="6" fill="#ffffff" stroke="#c9d4e2"/>
+  <text x="99" y="98" font-size="11.5" font-weight="700" fill="#1f2937" text-anchor="middle">① 分配完成</text>
+  <text x="99" y="117" font-size="10" fill="#1f2937" text-anchor="middle" font-family="ui-monospace, Menlo, monospace">new TempSensor(25.0)</text>
+  <text x="99" y="134" font-size="10" fill="#8a929c" text-anchor="middle">拿到 raw，还没人负责</text>
+
+  <path d="M 178 109 L 218 109" stroke="#a0aec0" stroke-width="1.4" marker-end="url(#a1g)"/>
+
+  <!-- 拍 2 · 窗口 -->
+  <rect x="222" y="70" width="236" height="78" rx="6" fill="#fde8e8" stroke="#e57373" stroke-dasharray="5 3"/>
+  <text x="340" y="92" font-size="11.5" font-weight="700" fill="#b3261e" text-anchor="middle">② 窗口：已分配、尚无主</text>
+  <text x="340" y="112" font-size="10" fill="#b3261e" text-anchor="middle">这里 throw　→　指针没人接</text>
+  <text x="340" y="129" font-size="10" fill="#b3261e" text-anchor="middle">这里 return　→　内存没人放</text>
+  <text x="340" y="144" font-size="9.5" fill="#8a5a56" text-anchor="middle">两步之间隔着一条语句边界</text>
+
+  <path d="M 462 109 L 502 109" stroke="#a0aec0" stroke-width="1.4" marker-end="url(#a1g)"/>
+
+  <!-- 拍 3 -->
+  <rect x="506" y="76" width="150" height="66" rx="6" fill="#e8f5e9" stroke="#a5d6a7"/>
+  <text x="581" y="98" font-size="11.5" font-weight="700" fill="#1b5e20" text-anchor="middle">③ 接管并返回</text>
+  <text x="581" y="117" font-size="10" fill="#1b5e20" text-anchor="middle" font-family="ui-monospace, Menlo, monospace">unique_ptr&lt;Product&gt;(raw)</text>
+  <text x="581" y="134" font-size="10" fill="#4a7a52" text-anchor="middle">所有权写进返回类型</text>
+
+  <!-- 岔路后果 -->
+  <path d="M 340 152 L 340 178" stroke="#e57373" stroke-width="1.4" marker-end="url(#a1r)"/>
+  <text x="352" y="172" font-size="10" fill="#b3261e">走岔路</text>
+
+  <rect x="128" y="184" width="424" height="56" rx="6" fill="#fdf6f6" stroke="#e57373"/>
+  <text x="144" y="205" font-size="11" font-weight="700" fill="#b3261e">实测后果（不是「理论上会泄漏」）</text>
+  <text x="144" y="226" font-size="11" fill="#1f2937">捕获异常：未释放对象数 <tspan font-family="ui-monospace, Menlo, monospace" font-weight="700">1 → 2</tspan>　—— 差的那 1 个，就是窗口里丢掉的那块</text>
+
+  <!-- 结论 -->
+  <rect x="24" y="258" width="632" height="66" rx="6" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="40" y="280" font-size="11.5" fill="#1f2937">关掉窗口只有一条路：<tspan font-weight="700">分配和接管在同一条语句里完成</tspan>（RAII）—— 语句内部不存在「中间状态」可被观察。</text>
+  <text x="40" y="302" font-size="11.5" fill="#5b6472">这也解释了 <tspan font-family="ui-monospace, Menlo, monospace">make_unique</tspan> / <tspan font-family="ui-monospace, Menlo, monospace">make_shared</tspan> 为什么值得专门做成函数：把两句话压成一句。</text>
+</svg>
