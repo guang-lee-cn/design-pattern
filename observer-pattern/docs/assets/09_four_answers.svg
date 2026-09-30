@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 486" width="680" height="486" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect width="680" height="486" fill="#ffffff"/>
+
+  <text x="24" y="30" font-size="16" font-weight="700" fill="#1f2937">同一张名单，四种放法</text>
+  <text x="24" y="50" font-size="11.5" fill="#5b6472">四个真实项目，用第 8 节那五个问题各问一遍。每格是实测或源码原文给出的答案，不是设计意图。</text>
+  <text x="24" y="66" font-size="11.5" fill="#5b6472">四个项目都不在「一份名单、自己 new 自己 delete」这个默认形状上 —— 这正是它们值得看的地方。</text>
+
+  <text x="24" y="96" font-size="10.5" font-weight="700" fill="#5b6472">项目</text>
+  <text x="152" y="96" font-size="10.5" font-weight="700" fill="#5b6472">名单是什么</text>
+  <text x="254" y="96" font-size="10.5" font-weight="700" fill="#5b6472">挂在哪</text>
+  <text x="356" y="96" font-size="10.5" font-weight="700" fill="#5b6472">谁让它作废</text>
+  <text x="458" y="96" font-size="10.5" font-weight="700" fill="#5b6472">通知中被改</text>
+  <text x="560" y="96" font-size="10.5" font-weight="700" fill="#5b6472">数得出来吗</text>
+  <line x1="24" y1="106" x2="656" y2="106" stroke="#c9d4e2" stroke-width="1"/>
+  <line x1="146" y1="106" x2="146" y2="354" stroke="#eef2f7" stroke-width="1"/>
+  <line x1="248" y1="106" x2="248" y2="354" stroke="#eef2f7" stroke-width="1"/>
+  <line x1="350" y1="106" x2="350" y2="354" stroke="#eef2f7" stroke-width="1"/>
+  <line x1="452" y1="106" x2="452" y2="354" stroke="#eef2f7" stroke-width="1"/>
+  <line x1="554" y1="106" x2="554" y2="354" stroke="#eef2f7" stroke-width="1"/>
+
+  <!-- Qt -->
+  <text x="24" y="132" font-size="11" font-weight="700" fill="#1f2937">Qt 5.15</text>
+  <text x="24" y="148" font-size="9.5" fill="#5b6472">真编真跑</text>
+  <text x="152" y="132" font-size="10.5" fill="#1f2937">双向连接体链表</text>
+  <text x="254" y="132" font-size="10.5" fill="#1f2937">发布方</text>
+  <text x="356" y="132" font-size="10.5" fill="#1f2937">接收方析构</text>
+  <text x="356" y="148" font-size="10.5" fill="#7c3aed">自动摘</text>
+  <text x="458" y="132" font-size="10.5" fill="#1f2937">允许，本轮</text>
+  <text x="458" y="148" font-size="10.5" fill="#7c3aed">立即跳过</text>
+  <text x="560" y="132" font-size="10.5" fill="#1f2937">能</text>
+  <text x="560" y="148" font-size="10.5" fill="#5b6472">需子类化</text>
+  <line x1="24" y1="168" x2="656" y2="168" stroke="#eef2f7" stroke-width="1"/>
+
+  <!-- Boost -->
+  <text x="24" y="194" font-size="11" font-weight="700" fill="#1f2937">Boost.Signals2</text>
+  <text x="24" y="210" font-size="9.5" fill="#5b6472">1.83，真编真跑</text>
+  <text x="152" y="194" font-size="10.5" fill="#1f2937">连接体</text>
+  <text x="152" y="210" font-size="10.5" fill="#5b6472">（弱引用）</text>
+  <text x="254" y="194" font-size="10.5" fill="#1f2937">信号对象</text>
+  <text x="356" y="194" font-size="10.5" fill="#1f2937">被跟踪对象死</text>
+  <text x="356" y="210" font-size="10.5" fill="#7c3aed">整条槽失效</text>
+  <text x="458" y="194" font-size="10.5" fill="#1f2937">允许，进</text>
+  <text x="458" y="210" font-size="10.5" fill="#7c3aed">垃圾袋</text>
+  <text x="560" y="194" font-size="10.5" fill="#1f2937">能</text>
+  <text x="560" y="210" font-size="10.5" fill="#5b6472">num_slots()</text>
+  <line x1="24" y1="230" x2="656" y2="230" stroke="#eef2f7" stroke-width="1"/>
+
+  <!-- kernel -->
+  <text x="24" y="256" font-size="11" font-weight="700" fill="#1f2937">Linux 6.8</text>
+  <text x="24" y="272" font-size="9.5" fill="#5b6472">通知链，只摘引</text>
+  <text x="152" y="256" font-size="10.5" fill="#1f2937">侵入式单链表</text>
+  <text x="152" y="272" font-size="10.5" fill="#5b6472">带优先级</text>
+  <text x="254" y="256" font-size="10.5" fill="#1f2937">全局静态</text>
+  <text x="254" y="272" font-size="10.5" fill="#5b6472">链头</text>
+  <text x="356" y="256" font-size="10.5" fill="#1f2937">只有显式注销</text>
+  <text x="356" y="272" font-size="10.5" fill="#b91c1c">链内禁止</text>
+  <text x="458" y="256" font-size="10.5" fill="#b91c1c">禁止</text>
+  <text x="458" y="272" font-size="10.5" fill="#5b6472">协议错误</text>
+  <text x="560" y="256" font-size="10.5" fill="#5b6472">只回答</text>
+  <text x="560" y="272" font-size="10.5" fill="#5b6472">「空不空」</text>
+  <line x1="24" y1="292" x2="656" y2="292" stroke="#eef2f7" stroke-width="1"/>
+
+  <!-- Fast-DDS -->
+  <text x="24" y="318" font-size="11" font-weight="700" fill="#1f2937">Fast-DDS 3.6.2</text>
+  <text x="24" y="334" font-size="9.5" fill="#5b6472">只摘引</text>
+  <text x="152" y="318" font-size="10.5" fill="#1f2937">单个指针</text>
+  <text x="152" y="334" font-size="10.5" fill="#b91c1c">不是名单</text>
+  <text x="254" y="318" font-size="10.5" fill="#1f2937">实体自己</text>
+  <text x="254" y="334" font-size="10.5" fill="#5b6472">＋状态掩码</text>
+  <text x="356" y="318" font-size="10.5" fill="#1f2937">析构前摘空</text>
+  <text x="458" y="318" font-size="10.5" fill="#5b6472">不存在</text>
+  <text x="458" y="334" font-size="10.5" fill="#5b6472">这个问题</text>
+  <text x="560" y="318" font-size="10.5" fill="#5b6472">不用数</text>
+  <text x="560" y="334" font-size="10.5" fill="#5b6472">0 或 1</text>
+  <line x1="24" y1="354" x2="656" y2="354" stroke="#c9d4e2" stroke-width="1"/>
+
+  <rect x="24" y="372" width="632" height="100" rx="6" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="40" y="396" font-size="10.5" font-weight="700" fill="#1f2937">四个项目里，没有一个把「谁在听」当作发布方自己的私事：前两个把它交给框架，后两个把它交给别的层。</text>
+  <text x="40" y="418" font-size="10.5" fill="#1f2937">「通知中能不能改名单」的答案分两派：进程内框架全是「允许」（延迟释放 + 跳过），内核是「禁止」。</text>
+  <text x="40" y="440" font-size="10.5" fill="#1f2937">「数得出来吗」与「名单挂在谁身上」是同一条轴：挂在一个有主人的对象上就报得出，挂在全局静态链上就只</text>
+  <text x="40" y="458" font-size="10.5" fill="#1f2937">能回答「空不空」。</text>
+</svg>
