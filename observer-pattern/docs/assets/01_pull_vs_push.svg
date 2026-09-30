@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 440" width="680" height="440" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect width="680" height="440" fill="#ffffff"/>
+
+  <text x="24" y="30" font-size="16" font-weight="700" fill="#1f2937">同一个问题，两个年代的答案</text>
+  <text x="24" y="50" font-size="12" fill="#5b6472">「一个对象变了，谁该知道」——1979 年没人被通知，1980 年代改成广播。方向反了过来。</text>
+
+  <!-- ============ 1979 ============ -->
+  <text x="24" y="82" font-size="12" font-weight="700" fill="#0c447c">1979 · Reenskaug 的 MVC：靠提问（拉）</text>
+
+  <rect x="24" y="96" width="160" height="52" rx="6" fill="#e8f0fe" stroke="#c7d7f5"/>
+  <text x="104" y="118" font-size="12" font-weight="700" fill="#1f2937" text-anchor="middle">Controller</text>
+  <text x="104" y="136" font-size="10.5" fill="#5b6472" text-anchor="middle">持有它的 views</text>
+
+  <rect x="260" y="96" width="160" height="52" rx="6" fill="#e8f0fe" stroke="#c7d7f5"/>
+  <text x="340" y="118" font-size="12" font-weight="700" fill="#1f2937" text-anchor="middle">View</text>
+  <text x="340" y="136" font-size="10.5" fill="#5b6472" text-anchor="middle">呈现过滤器</text>
+
+  <rect x="496" y="96" width="160" height="52" rx="6" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="576" y="118" font-size="12" font-weight="700" fill="#1f2937" text-anchor="middle">Model</text>
+  <text x="576" y="136" font-size="10.5" fill="#8a929c" text-anchor="middle">谁都不持有</text>
+
+  <path d="M 184 122 L 252 122" stroke="#c9d4e2" stroke-width="1.4"/>
+  <path d="M 258 122 L 250 118 L 250 126 z" fill="#c9d4e2"/>
+  <text x="220" y="114" font-size="10" fill="#0c447c" text-anchor="middle">parts</text>
+
+  <path d="M 420 122 L 488 122" stroke="#c9d4e2" stroke-width="1.4"/>
+  <path d="M 494 122 L 486 118 L 486 126 z" fill="#c9d4e2"/>
+  <text x="455" y="114" font-size="10" fill="#0c447c" text-anchor="middle">asking questions</text>
+
+  <text x="340" y="172" font-size="10.5" fill="#8a929c" text-anchor="middle">Model 不知道谁在看它；View 想看的时候自己去问 —— 全篇没有「通知」这个动作</text>
+
+  <path d="M 24 196 L 656 196" stroke="#e6ebf1" stroke-width="1"/>
+
+  <!-- ============ 1980s ============ -->
+  <text x="24" y="226" font-size="12" font-weight="700" fill="#1b5e20">1980s · Smalltalk-80 的 dependents 机制：靠广播（推）</text>
+  <text x="656" y="226" font-size="10.5" fill="#1b5e20" text-anchor="end">changed → update:</text>
+
+  <rect x="24" y="242" width="176" height="112" rx="6" fill="#e8f5e9" stroke="#a5d6a7"/>
+  <text x="112" y="266" font-size="12" font-weight="700" fill="#1b5e20" text-anchor="middle">Model</text>
+  <text x="112" y="286" font-size="10.5" fill="#5b6472" text-anchor="middle">sponsor</text>
+  <rect x="44" y="300" width="136" height="40" rx="4" fill="#ffffff" stroke="#a5d6a7"/>
+  <text x="112" y="316" font-size="10" fill="#5b6472" text-anchor="middle">dependents 名单</text>
+  <text x="112" y="331" font-size="9.5" font-family="ui-monospace, Menlo, monospace" fill="#1b5e20" text-anchor="middle">add/removeDependent:</text>
+
+  <rect x="364" y="242" width="292" height="32" rx="6" fill="#e8f0fe" stroke="#c7d7f5"/>
+  <text x="380" y="263" font-size="11.5" fill="#1f2937">View　<tspan fill="#5b6472" font-size="10.5">dependent ①</tspan></text>
+  <rect x="364" y="282" width="292" height="32" rx="6" fill="#e8f0fe" stroke="#c7d7f5"/>
+  <text x="380" y="303" font-size="11.5" fill="#1f2937">View　<tspan fill="#5b6472" font-size="10.5">dependent ②</tspan></text>
+  <rect x="364" y="322" width="292" height="32" rx="6" fill="#e8f0fe" stroke="#c7d7f5"/>
+  <text x="380" y="343" font-size="11.5" fill="#1f2937">Controller　<tspan fill="#5b6472" font-size="10.5">dependent ③</tspan></text>
+
+  <path d="M 200 272 C 270 272, 300 258, 356 258" fill="none" stroke="#c9d4e2" stroke-width="1.4"/>
+  <path d="M 200 288 C 270 288, 300 298, 356 298" fill="none" stroke="#c9d4e2" stroke-width="1.4"/>
+  <path d="M 200 304 C 270 304, 300 338, 356 338" fill="none" stroke="#c9d4e2" stroke-width="1.4"/>
+  <path d="M 362 258 L 354 253 L 354 263 z" fill="#c9d4e2"/>
+  <path d="M 362 298 L 354 293 L 354 303 z" fill="#c9d4e2"/>
+  <path d="M 362 338 L 354 333 L 354 343 z" fill="#c9d4e2"/>
+
+  <rect x="24" y="372" width="632" height="48" rx="6" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="40" y="392" font-size="11.5" fill="#1f2937">同一件事，两套名字：<tspan font-weight="700">sponsor / dependent</tspan> 说的是依附关系，<tspan font-weight="700">Subject / Observer</tspan> 说的是观察角色。</text>
+  <text x="40" y="410" font-size="11" fill="#5b6472">换名的同时，接口也从「约定必须实现 update:」变成了「显式的抽象基类」。</text>
+
+</svg>
