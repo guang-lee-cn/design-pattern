@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 500" width="680" height="500" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect width="680" height="500" fill="#ffffff"/>
+
+  <text x="24" y="30" font-size="16" font-weight="700" fill="#1f2937">类型擦除的价格：std::function&lt;void(double)&gt; 的 32 个字节</text>
+  <text x="24" y="50" font-size="11.5" fill="#5b6472">不是语言规定，是 libstdc++ 的实现细节 —— 所以这里量出来，不引用文档。</text>
+  <text x="24" y="66" font-size="11.5" fill="#5b6472">接收方被塞进一块 16 字节的内联缓冲；装不下就落到堆上，于是第 6 节多了一份要收回的东西。</text>
+
+  <!-- ============ 对象布局 ============ -->
+  <text x="24" y="98" font-size="12" font-weight="700" fill="#1f2937">对象布局（实测 sizeof = 32 字节）</text>
+
+  <rect x="24" y="112" width="192" height="52" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="120" y="132" font-size="10.5" fill="#1f2937" text-anchor="middle">内联缓冲 _M_functor</text>
+  <text x="120" y="150" font-size="10" fill="#5b6472" text-anchor="middle">16 字节（union）</text>
+
+  <rect x="216" y="112" width="96" height="52" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="264" y="132" font-size="10.5" fill="#1f2937" text-anchor="middle">_M_manager</text>
+  <text x="264" y="150" font-size="10" fill="#5b6472" text-anchor="middle">8 字节</text>
+
+  <rect x="312" y="112" width="96" height="52" rx="4" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="360" y="132" font-size="10.5" fill="#1f2937" text-anchor="middle">_M_invoker</text>
+  <text x="360" y="150" font-size="10" fill="#5b6472" text-anchor="middle">8 字节</text>
+
+  <rect x="432" y="112" width="224" height="52" rx="4" fill="#fef2f2" stroke="#fca5a5"/>
+  <text x="446" y="132" font-size="10.5" fill="#b91c1c">接收方的类型名不在任何字段里</text>
+  <text x="446" y="150" font-size="10.5" fill="#b91c1c">—— 16 字节缓冲里只有它的副本</text>
+
+  <text x="24" y="182" font-size="10.5" fill="#5b6472">16 + 8 + 8 = 32。前 16 字节原地存放调用对象，两个指针指向编译器为这个类型生成的胶水代码。</text>
+
+  <!-- ============ 阈值扫描 ============ -->
+  <text x="24" y="214" font-size="12" font-weight="700" fill="#1f2937">内联阈值扫描（operator new 计数，每次构造重新计数）</text>
+
+  <g font-size="10.5">
+    <text x="150" y="242" fill="#1f2937" text-anchor="end">capture 1 B</text>
+    <rect x="158" y="231" width="52" height="14" fill="#dcfce7" stroke="#86efac"/>
+    <text x="222" y="242" fill="#15803d">allocations = 0</text>
+
+    <text x="150" y="262" fill="#1f2937" text-anchor="end">capture 8 B</text>
+    <rect x="158" y="251" width="52" height="14" fill="#dcfce7" stroke="#86efac"/>
+    <text x="222" y="262" fill="#15803d">allocations = 0</text>
+
+    <text x="150" y="282" fill="#1f2937" text-anchor="end">capture 12 B</text>
+    <rect x="158" y="271" width="52" height="14" fill="#dcfce7" stroke="#86efac"/>
+    <text x="222" y="282" fill="#15803d">allocations = 0</text>
+
+    <text x="150" y="302" fill="#1f2937" text-anchor="end">capture 16 B</text>
+    <rect x="158" y="291" width="52" height="14" fill="#dcfce7" stroke="#86efac"/>
+    <text x="222" y="302" font-weight="700" fill="#15803d">allocations = 0　← 阈值就在这里</text>
+  </g>
+
+  <!-- 阈值分界线 -->
+  <line x1="24" y1="313" x2="656" y2="313" stroke="#c9d4e2" stroke-width="1" stroke-dasharray="5 4"/>
+
+  <g font-size="10.5">
+    <text x="150" y="332" fill="#1f2937" text-anchor="end">capture 20 B</text>
+    <rect x="158" y="321" width="52" height="14" fill="#fee2e2" stroke="#fca5a5"/>
+    <text x="222" y="332" fill="#b91c1c">allocations = 1</text>
+
+    <text x="150" y="352" fill="#1f2937" text-anchor="end">capture 24 B</text>
+    <rect x="158" y="341" width="52" height="14" fill="#fee2e2" stroke="#fca5a5"/>
+    <text x="222" y="352" fill="#b91c1c">allocations = 1</text>
+
+    <text x="150" y="372" fill="#1f2937" text-anchor="end">capture 32 B</text>
+    <rect x="158" y="361" width="52" height="14" fill="#fee2e2" stroke="#fca5a5"/>
+    <text x="222" y="372" fill="#b91c1c">allocations = 1</text>
+  </g>
+
+  <text x="400" y="302" font-size="10.5" fill="#15803d">以上：内联，零分配</text>
+  <text x="400" y="332" font-size="10.5" fill="#b91c1c">以下：落堆，每个接收方一次分配</text>
+  <text x="400" y="362" font-size="10.5" fill="#5b6472">16 字节是 libstdc++ 的值，不是标准保证</text>
+  <text x="400" y="378" font-size="10.5" fill="#5b6472">—— 换标准库要重测。</text>
+
+  <!-- ============ 结论 ============ -->
+  <rect x="24" y="396" width="632" height="88" rx="6" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="40" y="420" font-size="10.5" fill="#1f2937">第 1 代的名单是 vector&lt;Observer*&gt;：每个接收方 8 字节，零分配，生产者类体里出现 4 次它的类型名。</text>
+  <text x="40" y="438" font-size="10.5" fill="#1f2937">第 2、3 代的名单是 vector&lt;std::function&lt;void(double)&gt;&gt;：每个 32 字节，捕获超过 16 字节还要再分配一次，类型名出现 0 次。</text>
+  <text x="40" y="460" font-size="10.5" fill="#5b6472">代价与收益指向同一件事 —— 接收方从「一个有名字的对象」变成了「一段没有名字的代码」；</text>
+  <text x="40" y="476" font-size="10.5" fill="#5b6472">悬垂还在，但它不再留在生产者能搜到的地方（第 6 节那三份探针要跟着换搜法）。</text>
+</svg>
