@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 524" width="680" height="524" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect width="680" height="524" fill="#ffffff"/>
+
+  <text x="24" y="30" font-size="16" font-weight="700" fill="#1f2937">看着像，认出来的代价不一样</text>
+  <text x="24" y="50" font-size="11.5" fill="#5b6472">六种形态跑同一份场景：4 次读数 × 3 个接收方。每格是那一轮真正被叫到的接收方个数，实心是叫到、空心是没叫到。</text>
+  <text x="24" y="66" font-size="11.5" fill="#5b6472">右侧一列是「以 A 为基准逐字节比对，第几轮开始看得出不同」—— 它是这条线上的位置，不是好不好。</text>
+
+  <!-- 表头 -->
+  <text x="24" y="100" font-size="10.5" font-weight="700" fill="#5b6472">形态</text>
+  <text x="176" y="100" font-size="10.5" font-weight="700" fill="#5b6472">名单在谁手上</text>
+  <text x="329" y="100" font-size="10.5" font-weight="700" fill="#5b6472" text-anchor="middle">25.0</text>
+  <text x="388" y="100" font-size="10.5" font-weight="700" fill="#5b6472" text-anchor="middle">26.5</text>
+  <text x="447" y="100" font-size="10.5" font-weight="700" fill="#5b6472" text-anchor="middle">27.0</text>
+  <text x="506" y="100" font-size="10.5" font-weight="700" fill="#5b6472" text-anchor="middle">99.0</text>
+  <text x="598" y="100" font-size="10.5" font-weight="700" fill="#5b6472" text-anchor="middle">首次看得出</text>
+  <line x1="24" y1="110" x2="656" y2="110" stroke="#c9d4e2" stroke-width="1"/>
+
+  <!-- A 观察者 push -->
+  <text x="24" y="136" font-size="11" font-weight="700" fill="#1f2937">A 观察者 push</text>
+  <text x="176" y="136" font-size="10.5" fill="#5b6472">发布方</text>
+  <g fill="#7c3aed">
+    <circle cx="317" cy="132" r="4.5"/><circle cx="329" cy="132" r="4.5"/><circle cx="341" cy="132" r="4.5"/>
+    <circle cx="376" cy="132" r="4.5"/><circle cx="388" cy="132" r="4.5"/><circle cx="400" cy="132" r="4.5"/>
+    <circle cx="435" cy="132" r="4.5"/><circle cx="447" cy="132" r="4.5"/><circle cx="459" cy="132" r="4.5"/>
+    <circle cx="494" cy="132" r="4.5"/><circle cx="506" cy="132" r="4.5"/><circle cx="518" cy="132" r="4.5"/>
+  </g>
+  <text x="598" y="136" font-size="10.5" fill="#5b6472" text-anchor="middle">— 基准</text>
+  <line x1="24" y1="154" x2="656" y2="154" stroke="#eef2f7" stroke-width="1"/>
+
+  <!-- B 观察者 pull -->
+  <text x="24" y="180" font-size="11" font-weight="700" fill="#1f2937">B 观察者 pull</text>
+  <text x="176" y="180" font-size="10.5" fill="#5b6472">发布方</text>
+  <g fill="#7c3aed">
+    <circle cx="317" cy="176" r="4.5"/><circle cx="329" cy="176" r="4.5"/><circle cx="341" cy="176" r="4.5"/>
+    <circle cx="376" cy="176" r="4.5"/><circle cx="388" cy="176" r="4.5"/><circle cx="400" cy="176" r="4.5"/>
+    <circle cx="435" cy="176" r="4.5"/><circle cx="447" cy="176" r="4.5"/><circle cx="459" cy="176" r="4.5"/>
+    <circle cx="494" cy="176" r="4.5"/><circle cx="506" cy="176" r="4.5"/><circle cx="518" cy="176" r="4.5"/>
+  </g>
+  <text x="598" y="180" font-size="10.5" fill="#5b6472" text-anchor="middle">第 1 轮</text>
+  <line x1="24" y1="198" x2="656" y2="198" stroke="#eef2f7" stroke-width="1"/>
+
+  <!-- C ChangeManager -->
+  <rect x="18" y="204" width="644" height="40" rx="4" fill="#e9dcff"/>
+  <text x="24" y="224" font-size="11" font-weight="700" fill="#1f2937">C ChangeManager</text>
+  <text x="176" y="224" font-size="10.5" fill="#5b6472">中介（第三方）</text>
+  <g fill="#7c3aed">
+    <circle cx="317" cy="220" r="4.5"/><circle cx="329" cy="220" r="4.5"/><circle cx="341" cy="220" r="4.5"/>
+    <circle cx="376" cy="220" r="4.5"/><circle cx="388" cy="220" r="4.5"/><circle cx="400" cy="220" r="4.5"/>
+    <circle cx="435" cy="220" r="4.5"/><circle cx="447" cy="220" r="4.5"/><circle cx="459" cy="220" r="4.5"/>
+    <circle cx="494" cy="220" r="4.5"/><circle cx="506" cy="220" r="4.5"/><circle cx="518" cy="220" r="4.5"/>
+  </g>
+  <text x="598" y="224" font-size="10.5" font-weight="700" fill="#b91c1c" text-anchor="middle">从来看不出</text>
+
+  <!-- D 一次性回调 -->
+  <text x="24" y="268" font-size="11" font-weight="700" fill="#1f2937">D 一次性回调</text>
+  <text x="176" y="268" font-size="10.5" fill="#5b6472">发布方</text>
+  <g fill="#7c3aed">
+    <circle cx="317" cy="264" r="4.5"/><circle cx="329" cy="264" r="4.5"/><circle cx="341" cy="264" r="4.5"/>
+  </g>
+  <g fill="none" stroke="#c9d4e2" stroke-width="1.2">
+    <circle cx="376" cy="264" r="4"/><circle cx="388" cy="264" r="4"/><circle cx="400" cy="264" r="4"/>
+    <circle cx="435" cy="264" r="4"/><circle cx="447" cy="264" r="4"/><circle cx="459" cy="264" r="4"/>
+    <circle cx="494" cy="264" r="4"/><circle cx="506" cy="264" r="4"/><circle cx="518" cy="264" r="4"/>
+  </g>
+  <text x="598" y="268" font-size="10.5" fill="#5b6472" text-anchor="middle">第 2 轮</text>
+  <line x1="24" y1="286" x2="656" y2="286" stroke="#eef2f7" stroke-width="1"/>
+
+  <!-- E 责任链 -->
+  <text x="24" y="312" font-size="11" font-weight="700" fill="#1f2937">E 责任链</text>
+  <text x="176" y="312" font-size="10.5" fill="#5b6472">发布方</text>
+  <g fill="#7c3aed">
+    <circle cx="317" cy="308" r="4.5"/><circle cx="329" cy="308" r="4.5"/><circle cx="341" cy="308" r="4.5"/>
+    <circle cx="376" cy="308" r="4.5"/><circle cx="388" cy="308" r="4.5"/><circle cx="400" cy="308" r="4.5"/>
+    <circle cx="435" cy="308" r="4.5"/><circle cx="447" cy="308" r="4.5"/><circle cx="459" cy="308" r="4.5"/>
+    <circle cx="494" cy="308" r="4.5"/><circle cx="506" cy="308" r="4.5"/>
+  </g>
+  <g fill="none" stroke="#c9d4e2" stroke-width="1.2">
+    <circle cx="518" cy="308" r="4"/>
+  </g>
+  <text x="598" y="312" font-size="10.5" fill="#5b6472" text-anchor="middle">第 4 轮</text>
+  <line x1="24" y1="330" x2="656" y2="330" stroke="#eef2f7" stroke-width="1"/>
+
+  <!-- F 纯拉 -->
+  <text x="24" y="356" font-size="11" font-weight="700" fill="#1f2937">F 纯拉（无通知）</text>
+  <text x="176" y="356" font-size="10.5" fill="#5b6472">谁都没有</text>
+  <g fill="#7c3aed">
+    <circle cx="317" cy="352" r="4.5"/><circle cx="329" cy="352" r="4.5"/><circle cx="341" cy="352" r="4.5"/>
+    <circle cx="376" cy="352" r="4.5"/><circle cx="388" cy="352" r="4.5"/><circle cx="400" cy="352" r="4.5"/>
+    <circle cx="435" cy="352" r="4.5"/><circle cx="447" cy="352" r="4.5"/><circle cx="459" cy="352" r="4.5"/>
+    <circle cx="494" cy="352" r="4.5"/><circle cx="506" cy="352" r="4.5"/><circle cx="518" cy="352" r="4.5"/>
+  </g>
+  <text x="598" y="356" font-size="10.5" fill="#5b6472" text-anchor="middle">第 1 轮</text>
+  <line x1="24" y1="374" x2="656" y2="374" stroke="#c9d4e2" stroke-width="1"/>
+
+  <!-- 结论 -->
+  <rect x="24" y="392" width="632" height="112" rx="6" fill="#eef2f7" stroke="#c9d4e2"/>
+  <text x="40" y="416" font-size="10.5" font-weight="700" fill="#1f2937">C 和 A 逐字节相同。名单搬到了 ChangeManager 手上，行为一点没变 —— 这一类跑不出来，只能看代码结构判。</text>
+  <text x="40" y="442" font-size="10.5" fill="#1f2937">D 和 E 的差异藏在后面：D 要跑到第二轮（名单本来就只够用一次），</text>
+  <text x="40" y="460" font-size="10.5" fill="#1f2937">E 要等到有人反对的那一轮 —— 它让排在后面的 AlarmDisplay 一个字节都没收到。</text>
+  <text x="40" y="486" font-size="10.5" fill="#5b6472">F 的触达数和 A 一样，但输出格式就不同（cycle / polls 而不是 tick / got）：它根本没有通知，是消费者自己来取的。</text>
+</svg>
