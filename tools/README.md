@@ -47,7 +47,7 @@
 
 | 脚本 | 作用 |
 |---|---|
-| [`check_pattern.py`](check_pattern.py) | 一个模式是否符合 [`TEMPLATE.md`](../TEMPLATE.md)：结构 / 三层命名 / 相对链接 / 配套路径 / 来源标注 |
+| [`check_pattern.py`](check_pattern.py) | 一个模式是否符合 [`TEMPLATE.md`](../TEMPLATE.md)：结构 / 三层命名 / 相对链接 / 配套路径 / 引用出处 |
 | [`check_state.py`](check_state.py) | [`STATE.md`](../STATE.md) 状态锚点是否自洽 |
 
 两个脚本都只做**可机械判定**的检查，判不了的留给人工（见 `AGENTS.md` §7）。
