@@ -9,6 +9,13 @@
 
 只依赖 Python 3 标准库，不需要 git、不需要网络。
 输出 [!!] 为必须修，[!] 为警告。退出码 1 表示存在 [!!]。
+
+2026-09-30 修订（四条规则曾经严重过时，对工厂模式报出 43 条假失败）：
+  1. docs/ 命名接受**三层**（`NN-` / `NNx-` 子编号 / `A0N-` 专题 / `quizNN-` 测验），不再只认 `\\d{2}-`；
+  2. `src/` `include/` 开头的路径视为**上游源码引用**，不要求落在 `code/` 下；
+     本仓库配套代码一律以 `code/` 前缀引用，必须真实存在；
+  3. md 相对链接检查先剥掉行内代码段——`` `![](assets/x.svg)` `` 是引用语法示例，不是真链接；
+  4. `code/` 的编译入口放宽为「存在任一构建脚本」，不再要求顶层 `CMakeLists.txt`。
 """
 
 from __future__ import annotations
@@ -18,15 +25,34 @@ import re
 import sys
 from pathlib import Path
 
-DOC_RE = re.compile(r"^(\d{2})-(.+)\.md$")
+# 三层命名（与 docs/00-讲解计划.md 的定义一致）：
+#   主线  `NN-<标题>.md`，子编号写成紧贴后缀 `NNx-`（如 `04a-` / `04b-`）
+#   专题  `A0N-<标题>.md`
+#   测验  `quizNN-<标题>.md`
+DOC_MAIN_RE = re.compile(r"^(\d{2})([a-z]?)-(.+)\.md$")
+DOC_TOPIC_RE = re.compile(r"^A(\d{2})-(.+)\.md$")
+DOC_QUIZ_RE = re.compile(r"^quiz(\d{2})-(.+)\.md$")
 NOTE_RE = re.compile(r"^(\d{3})-(.+)\.md$")
 LINK_RE = re.compile(r"\[[^\]\n]*\]\(([^)\s]+)\)")
-# `src/...`、`include/...` 形式，带源码类扩展名
-SRC_PATH_RE = re.compile(
-    r"(?:^|[\s/`'\"])((?:src|include)/[A-Za-z0-9_./+-]*\.(?:cpp|cc|cxx|h|hpp|txt|cmake|json))"
+# 本仓库配套代码：正文一律写成 `code/...`（相对**模式根**），必须真实存在。
+LOCAL_CODE_RE = re.compile(
+    r"(?:^|[\s`'\"])(code/[A-Za-z0-9_][A-Za-z0-9_./+-]*"
+    r"\.(?:cpp|cc|cxx|c|h|hpp|sh|py|txt|cmake))"
 )
+# 上游源码引用：`src/...`、`include/...`。**本仓库 code/ 下不存在这两个顶层目录**，
+# 所以这类路径一律视为第三方源码引用——考据类文档（A02~A05）的正文主体就是引用上游代码，
+# 只计数、不要求落在 code/ 下。
+UPSTREAM_PATH_RE = re.compile(
+    r"(?:^|[\s`'\"])((?:src|include)/[A-Za-z0-9_./+-]*\.(?:cpp|cc|cxx|h|hpp|txt|cmake|json))"
+)
+# 构建入口：code/ 下出现任意一个即视为示例可独立编译
+BUILD_ENTRY_NAMES = ("CMakeLists.txt", "Makefile", "build.sh", "run.sh")
 # 代码块首部注释里出现任意一个，即视为已标注来源
-PROVENANCE_MARKERS = ("src/", "include/", "不在配套仓库中", "非本仓库代码", "仓库里是")
+PROVENANCE_MARKERS = ("src/", "include/", "code/", "不在配套仓库中", "非本仓库代码",
+                      "仓库里是", "摘自", "示意")
+# 首部注释里出现源码文件名（`// logger.h` / `// PersistenceFactory.cpp L46`）也算标注 ——
+# 这是本仓库正文实际在用的体例，旧判据只认 `src/`，对工厂模式报了 75 条假警告。
+PROVENANCE_FILE_RE = re.compile(r"\.(?:cpp|cc|cxx|c|h|hpp|hh|py|sh|json|txt|cmake)\b")
 # 需要检查来源标注的代码块语言
 CODE_LANGS = {"cpp", "c", "cc", "cxx", "c++", "h", "hpp", "cmake", "cmake-literal"}
 # 本仓库不允许出现的遗留形态
@@ -34,6 +60,23 @@ LEGACY_SUFFIXES = {".docx", ".doc", ".html", ".htm", ".psd"}
 
 CN_DIGITS = {"一": 1, "二": 2, "三": 3, "四": 4, "五": 5,
              "六": 6, "七": 7, "八": 8, "九": 9, "十": 10}
+
+
+def doc_key(name: str):
+    """把 docs/ 下的文件名归成 `层:序号` 键；不合三层体例返回 None。
+
+    子编号（`04a-` / `04b-`）与主号（`04-`）算不同键，所以它们并列不报「序号重复」。
+    """
+    m = DOC_MAIN_RE.match(name)
+    if m:
+        return "主线:" + m.group(1) + m.group(2)
+    m = DOC_TOPIC_RE.match(name)
+    if m:
+        return "专题:A" + m.group(1)
+    m = DOC_QUIZ_RE.match(name)
+    if m:
+        return "测验:quiz" + m.group(1)
+    return None
 
 
 def cn_ordinal(text: str):
@@ -58,6 +101,20 @@ def cn_ordinal(text: str):
     if len(text) == 1:
         return CN_DIGITS.get(text)
     return None
+
+
+def build_entries(code: Path):
+    """列出 code/ 下的构建入口，跳过 build/ 等产物目录。"""
+    out = []
+    for p in sorted(code.rglob("*")):
+        if not p.is_file() or p.name not in BUILD_ENTRY_NAMES:
+            continue
+        parents = p.relative_to(code).parts[:-1]
+        if any(d == "build" or d.startswith("build-") or d == ".git"
+               for d in parents):
+            continue
+        out.append(p)
+    return out
 
 
 def fenced_blocks(lines):
@@ -141,14 +198,19 @@ def check_pattern(root: Path, quiet=False) -> int:
         rep.fail("缺 docs/ —— 正文目录")
     notes = pat / "notes"
     if not notes.is_dir():
-        rep.fail("缺 notes/ —— 问题记录与复盘目录")
+        rep.warn("缺 notes/ —— 问题记录与复盘目录（真踩过坑才写得出来，写到再建）")
     code = pat / "code"
     if not code.is_dir():
         rep.fail("缺 code/ —— 配套工程目录")
-    elif not (code / "CMakeLists.txt").is_file():
-        rep.fail("code/CMakeLists.txt 不存在 —— 工程无法独立编译")
     else:
-        rep.ok("code/CMakeLists.txt 存在")
+        entries = build_entries(code)
+        if not entries:
+            rep.fail("code/ 下找不到任何构建入口"
+                     "（CMakeLists.txt / Makefile / build.sh / run.sh）—— 示例无法独立编译")
+        else:
+            shown = "、".join(str(p.relative_to(code)) for p in entries[:3])
+            more = f"，另 {len(entries) - 3} 个" if len(entries) > 3 else ""
+            rep.ok(f"code/ 构建入口 {len(entries)} 个（{shown}{more}）")
 
     doc_files = []
     if docs.is_dir():
@@ -158,18 +220,21 @@ def check_pattern(root: Path, quiet=False) -> int:
         if not doc_files:
             rep.fail("docs/ 下没有任何 .md")
         else:
-            nums = {}
+            keys = {}
             for p in doc_files:
-                m = DOC_RE.match(p.name)
-                if not m:
-                    rep.fail(f"docs/{p.name} 命名不合 `NN-<标题>.md`")
+                key = doc_key(p.name)
+                if key is None:
+                    rep.fail(f"docs/{p.name} 命名不合三层体例："
+                             "`NN-<标题>.md` / `NNx-<标题>.md` / `A0N-<标题>.md` / `quizNN-<标题>.md`")
                     continue
-                nums.setdefault(m.group(1), []).append(p.name)
-            for num, names in sorted(nums.items()):
+                keys.setdefault(key, []).append(p.name)
+            for key, names in sorted(keys.items()):
                 if len(names) > 1:
-                    rep.fail(f"docs/ 序号 {num} 重复：{', '.join(names)}")
+                    rep.fail(f"docs/ 序号 {key} 重复：{', '.join(names)}")
             if not any(lvl == "!!" for lvl, m in rep.items if "docs/" in m):
-                rep.ok(f"docs/ 下 {len(doc_files)} 篇，序号无重复")
+                layers = sorted({k.split(":", 1)[0] for k in keys})
+                rep.ok(f"docs/ 下 {len(doc_files)} 篇，三层命名合规、序号无重复"
+                       f"（{'/'.join(layers)}）")
 
     note_files = []
     if notes.is_dir():
@@ -208,7 +273,8 @@ def check_pattern(root: Path, quiet=False) -> int:
         if not p.is_file():
             continue
         for lineno, line in enumerate(p.read_text(encoding="utf-8").splitlines(), 1):
-            for target in LINK_RE.findall(line):
+            # 先剥掉行内代码段：写在反引号里的 `[](assets/x.svg)` 是**引用语法示例**，不是真链接
+            for target in LINK_RE.findall(re.sub(r"`[^`]*`", "", line)):
                 if target.startswith(("http://", "https://", "mailto:", "#")):
                     continue
                 checked_links += 1
@@ -227,20 +293,26 @@ def check_pattern(root: Path, quiet=False) -> int:
         rep.ok(f"md 相对链接 {checked_links} 条，全部可达")
 
     # ---- 4. 正文声明的配套代码路径 ----
+    # `code/...`（相对模式根）= 本仓库配套代码，必须存在；
+    # `src/...` `include/...` = 上游第三方源码引用，只计数、不要求存在。
     missing = []
     declared = 0
-    if code.is_dir():
-        for p in doc_files:
-            for lineno, line in enumerate(p.read_text(encoding="utf-8").splitlines(), 1):
-                for rel in SRC_PATH_RE.findall(line):
-                    declared += 1
-                    if not (code / rel).exists():
-                        missing.append(f"{p.name}:{lineno} → {rel}")
+    upstream = 0
+    for p in doc_files:
+        for lineno, line in enumerate(p.read_text(encoding="utf-8").splitlines(), 1):
+            scan = re.sub(r"https?://\S+", "", line)   # 去掉 URL，免得把网址里的 code/ 当本地路径
+            for rel in LOCAL_CODE_RE.findall(scan):
+                declared += 1
+                if not (pat / rel).exists():
+                    missing.append(f"{p.name}:{lineno} → {rel}")
+            upstream += len(UPSTREAM_PATH_RE.findall(scan))
     if missing:
         for m in sorted(set(missing)):
-            rep.fail(f"正文声明的代码路径不存在于 code/：{m}")
+            rep.fail(f"正文声明的配套代码路径不存在：{m}")
     elif declared:
-        rep.ok(f"正文声明的代码路径 {declared} 处，全部落在 code/ 下")
+        rep.ok(f"正文声明的配套代码路径 {declared} 处，全部存在")
+    if upstream:
+        rep.ok(f"上游源码引用 {upstream} 处（考据类引用，不要求在 code/ 下）")
 
     # ---- 5. 顶层节 ----
     for p in doc_files:
@@ -273,7 +345,8 @@ def check_pattern(root: Path, quiet=False) -> int:
                 continue
             total_blocks += 1
             head = " ".join(header_comment(body))
-            if not any(m in head for m in PROVENANCE_MARKERS):
+            if not any(m in head for m in PROVENANCE_MARKERS) \
+                    and not PROVENANCE_FILE_RE.search(head):
                 first = next((l.strip() for l in body if l.strip()), "")
                 unannotated.append(f"{p.name}:{start} [{lang}] {first[:70]}")
     if unannotated:
