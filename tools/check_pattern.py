@@ -16,6 +16,12 @@
      本仓库配套代码一律以 `code/` 前缀引用，必须真实存在；
   3. md 相对链接检查先剥掉行内代码段——`` `![](assets/x.svg)` `` 是引用语法示例，不是真链接；
   4. `code/` 的编译入口放宽为「存在任一构建脚本」，不再要求顶层 `CMakeLists.txt`。
+
+2026-09-30 再修订（另两条规则与正文实际体例相反，对工厂模式报出 85 条假警告）：
+  5. 顶层节中文序号降为**可选**体例 —— 全库 17 篇里只有 06 / 07 用；整篇不用不报，
+     且 `## 进度`（体例定义的尾部状态块）不计入正文节。
+  6. 代码块「来源」只指**引用他人代码**的出处（公开论坛 / 仓库）。本文档自己写的
+     教学示例没有来源可标，不再告警；只在块**自述引用**时要求出处可定位。
 """
 
 from __future__ import annotations
@@ -47,16 +53,21 @@ UPSTREAM_PATH_RE = re.compile(
 )
 # 构建入口：code/ 下出现任意一个即视为示例可独立编译
 BUILD_ENTRY_NAMES = ("CMakeLists.txt", "Makefile", "build.sh", "run.sh")
-# 代码块首部注释里出现任意一个，即视为已标注来源
-PROVENANCE_MARKERS = ("src/", "include/", "code/", "不在配套仓库中", "非本仓库代码",
-                      "仓库里是", "摘自", "示意")
-# 首部注释里出现源码文件名（`// logger.h` / `// PersistenceFactory.cpp L46`）也算标注 ——
-# 这是本仓库正文实际在用的体例，旧判据只认 `src/`，对工厂模式报了 75 条假警告。
+# 「来源」= **公开论坛 / 仓库中引用的他人代码**的出处。本仓库正文里的代码块绝大多数是
+# 教学示例（文档自己写的），没有来源可标 —— 所以「无来源标注」不是缺陷。
+# 只有**自述引用了他人代码**的块才要求出处，判定词如下（实测正文 76 个块里命中 0 个）：
+CITE_MARKERS = ("摘自", "来源", "截取", "改编自", "参考自", "复制自", "源自",
+                "不在配套仓库中", "非本仓库代码", "仓库里是")
+# 出处的「可定位」形式：本仓库路径 / 上游路径 / URL / 带扩展名的文件名
+# （`// logger.h`、`// PersistenceFactory.cpp L46` 这种写法即命中最后一条）。
 PROVENANCE_FILE_RE = re.compile(r"\.(?:cpp|cc|cxx|c|h|hpp|hh|py|sh|json|txt|cmake)\b")
 # 需要检查来源标注的代码块语言
 CODE_LANGS = {"cpp", "c", "cc", "cxx", "c++", "h", "hpp", "cmake", "cmake-literal"}
 # 本仓库不允许出现的遗留形态
 LEGACY_SUFFIXES = {".docx", ".doc", ".html", ".htm", ".psd"}
+
+# 参与不了序号统计的固定块（篇内状态栏，由 00-讲解计划.md 的体例定义）
+NON_BODY_HEADS = ("进度",)
 
 CN_DIGITS = {"一": 1, "二": 2, "三": 3, "四": 4, "五": 5,
              "六": 6, "七": 7, "八": 8, "九": 9, "十": 10}
@@ -315,45 +326,63 @@ def check_pattern(root: Path, quiet=False) -> int:
         rep.ok(f"上游源码引用 {upstream} 处（考据类引用，不要求在 code/ 下）")
 
     # ---- 5. 顶层节 ----
+    # 中文序号是**可选**体例：全库 17 篇里只有 06 / 07 用（各 6 / 7 节），其余 15 篇不用。
+    # 所以「整篇不用序号」不报；只在**用了**的时候要求连续。
+    # `## 进度` 是 00-讲解计划.md 定义的篇内状态块，不是正文节，不参与序号统计。
     for p in doc_files:
         text = p.read_text(encoding="utf-8")
-        heads = re.findall(r"^## (.+)$", text, re.M)
+        heads = [h for h in re.findall(r"^## (.+)$", text, re.M)
+                 if h.strip().rstrip("：:") not in NON_BODY_HEADS]
         if len(heads) < 2:
             rep.fail(f"{p.name} 顶层节只有 {len(heads)} 个 —— 不足两节不成文章")
             continue
         ordinals = []
-        bad = []
+        plain = []
         for h in heads:
             head = h.split("、", 1)[0].strip()
             val = cn_ordinal(head)
             if val is None:
-                bad.append(h)
+                plain.append(h)
             else:
                 ordinals.append(val)
-        if bad:
-            rep.warn(f"{p.name} 有 {len(bad)} 个顶层节未用中文序号：{'；'.join(bad[:3])}")
-        if ordinals and ordinals != list(range(ordinals[0], ordinals[0] + len(ordinals))):
+        if not ordinals:
+            continue                      # 整篇不用序号 —— 合法体例
+        if plain:
+            rep.warn(f"{p.name} 顶层节混用序号：{len(plain)} 节无序号"
+                     f"（{'；'.join(plain[:3])}）")
+        if ordinals != list(range(ordinals[0], ordinals[0] + len(ordinals))):
             rep.warn(f"{p.name} 顶层节序号不连续：{ordinals}")
 
-    # ---- 6. 代码块来源标注 ----
-    unannotated = []
-    total_blocks = 0
+    # ---- 6. 代码块来源 ----
+    # 「来源」= 公开论坛 / 仓库中**引用他人代码**时的出处（2026-09-30 裁决）。
+    # 正文里的块绝大多数是教学示例，由文档自己写，没有来源可标 —— 不再告警。
+    # 保留的唯一约束：**自述引用了他人代码**的块，出处必须可定位。
+    n_orig = 0
+    n_cited = 0
+    unlocatable = []
     for p in doc_files:
         lines = p.read_text(encoding="utf-8").splitlines()
         for start, lang, body in fenced_blocks(lines):
             if lang not in CODE_LANGS:
                 continue
-            total_blocks += 1
             head = " ".join(header_comment(body))
-            if not any(m in head for m in PROVENANCE_MARKERS) \
-                    and not PROVENANCE_FILE_RE.search(head):
+            if not any(m in head for m in CITE_MARKERS):
+                n_orig += 1
+                continue
+            n_cited += 1
+            locatable = bool(LOCAL_CODE_RE.search(head)
+                             or UPSTREAM_PATH_RE.search(head)
+                             or re.search(r"https?://\S+", head)
+                             or PROVENANCE_FILE_RE.search(head))
+            if not locatable:
                 first = next((l.strip() for l in body if l.strip()), "")
-                unannotated.append(f"{p.name}:{start} [{lang}] {first[:70]}")
-    if unannotated:
-        for u in unannotated:
-            rep.warn(f"代码块无来源标注：{u}")
-    if total_blocks:
-        rep.ok(f"代码块 {total_blocks} 个，其中 {len(unannotated)} 个待补来源标注")
+                unlocatable.append(f"{p.name}:{start} [{lang}] {first[:70]}")
+    for u in unlocatable:
+        rep.warn(f"自述引用了他人的代码，但出处不可定位：{u}")
+    if n_orig + n_cited:
+        tail = "出处均已定位" if not unlocatable else f"其中 {len(unlocatable)} 个出处不可定位"
+        rep.ok(f"代码块 {n_orig + n_cited} 个：原创示例 {n_orig} 个、"
+               f"声明引用他人代码 {n_cited} 个（{tail}）")
 
     emit(rep, quiet)
     return 1 if rep.count("!!") else 0
