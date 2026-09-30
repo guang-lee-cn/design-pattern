@@ -8,7 +8,9 @@ C++ 设计模式实践库。**一个模式一个自包含文件夹**——演化
 design-pattern/
 ├── AGENTS.md          协作约定（人机分工、续传协议、内容体例）
 ├── TEMPLATE.md        抽象基类：新模式的骨架与知识拆解流程（写新模式前读这份）
-├── tools/             机械校验脚本（check_pattern.py / check_state.py）
+├── tools/             跨场景工具 + 非系统默认依赖登记（见 tools/README.md）
+│                      ├── check_pattern.py   一个模式是否符合 TEMPLATE.md
+│                      └── check_state.py     STATE.md 状态锚点是否自洽
 ├── STATE.md           进度锚点（恢复会话只对齐、不产出）
 └── <pattern-name>/    一个模式的实现
     ├── README.md      该模式的导航（从哪读起、已知问题在哪）
@@ -40,7 +42,7 @@ cd factory-pattern/code/03_simple_factory/multi_tu && bash run.sh   # 03：多 T
 
 单文件示例不必走脚本，正文里直接给了命令（`g++ -std=c++17 -Wall xxx.cpp -o /tmp/x && /tmp/x`）。
 
-需要支持 C++17 的编译器（GCC 9+ / Clang 10+）；个别场景另需 `-fsanitize=address` 或 CMake ≥ 3.16。
+**依赖**：结构门禁只需 `git` + `python3` 标准库；跑场景示例另需支持 C++17 的编译器（GCC 9+ / Clang 10+），个别场景需 `-fsanitize=address`；**重新生成图**才需要 `rsvg-convert` + `Pillow`。完整清单与安装命令见 [`tools/README.md`](tools/README.md)。
 
 ## 复核
 
